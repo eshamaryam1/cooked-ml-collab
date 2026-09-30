@@ -27,11 +27,15 @@ Update the tables as you go — this file is the running log the two of us read 
   - [x] Rewriting the CSV from the sklearn cache reproduces byte-identical output
   - [x] Baseline `random_forest`, seed 42, 20% test split: **r2 0.8074, MAE 0.3259**
   - [x] `tests/` — 27 tests passing, `ruff check` + `ruff format --check` clean
-  - [ ] Nimra: `uv sync` then `.gitignore`, `CONTRIBUTING.md`, `README.md`, PR template
-  - [ ] **Hard gate** — Nimra's `git hash-object data/raw/california_housing.csv` must equal
+  - [x] Nimra: `uv sync` then `.gitignore`, `CONTRIBUTING.md`, `README.md`, PR template —
+    committed `chore: add gitignore…`, `docs: add contributing guide and pr template`
+  - [x] **Hard gate** — Nimra's `git hash-object data/raw/california_housing.csv` must equal
     `8edefff052981e57ff00439301b7776d3ff93998` before DVC init in Module 04
-  - [ ] `staging` + `dev` created from the final `main`, then pushed
-  - [ ] Branch protection on `main`, `staging`, `dev`
+    — verified on Nimra's clone 2026-09-30: `8edefff052981e57ff00439301b7776d3ff93998`,
+    sha256 `05817eef1b24d07428073579db624db1eeccda974211a026c26d6900dd9bb456`, matches Esha
+  - [ ] `staging` + `dev` created from the final `main`, then pushed — Esha, step 6
+  - [ ] Branch protection on `main`, `staging`, `dev` — Nimra, step 7 (GitHub → Settings →
+    Branches, after step 6 lands)
 - [ ] **M03 — pre-commit & secrets** (Nimra) — started: — · done: —
 - [ ] **M04 — DVC data versioning** (Nimra) — started: — · done: —
 - [ ] **M05 — Notebooks** (Esha) — started: — · done: —
