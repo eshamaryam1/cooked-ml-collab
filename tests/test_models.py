@@ -4,13 +4,14 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import joblib
 import numpy as np
 import pandas as pd
 import pytest
 from sklearn.ensemble import GradientBoostingRegressor, RandomForestRegressor
 from sklearn.linear_model import LinearRegression
 
-from cooked_ml.cli import compute_metrics, parse_args
+from cooked_ml.cli import compute_metrics, load_model, main, parse_args
 from cooked_ml.config import load_params
 from cooked_ml.data import build_splits, load_raw
 from cooked_ml.features import feature_columns, make_preprocessor
@@ -122,3 +123,22 @@ def test_params_flag_works_before_and_after_the_subcommand() -> None:
 def test_params_default_to_the_root_file() -> None:
     assert parse_args(["train"]).params == "params.yaml"
     assert parse_args(["train", "--force-download"]).force_download is True
+
+
+def test_load_model_scores_identically_to_a_private_copy(tmp_path: Path) -> None:
+    train_frame, test_frame = build_splits(load_raw(FIXTURE), test_size=0.2, seed=SEED)
+    features = feature_columns(train_frame.columns, "MedHouseVal")
+    pipeline = build_pipeline(load_params())
+    pipeline.fit(train_frame[features], train_frame["MedHouseVal"])
+
+    model_file = tmp_path / "model.joblib"
+    joblib.dump(pipeline, model_file)
+
+    expected = pipeline.predict(test_frame[features])
+    assert np.allclose(load_model(model_file).predict(test_frame[features]), expected)
+
+
+def test_cli_turns_errors_into_a_non_zero_exit(tmp_path: Path) -> None:
+    missing = str(tmp_path / "missing.yaml")
+    assert main(["train", "--params", missing]) == 1
+    assert main(["evaluate", "--params", missing]) == 1

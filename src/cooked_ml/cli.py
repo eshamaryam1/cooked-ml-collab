@@ -153,6 +153,18 @@ def cmd_train(args: argparse.Namespace) -> int:
     return 0
 
 
+def load_model(model_file: Path) -> Any:
+    """Load a saved pipeline without keeping a private copy of it.
+
+    Scoring only reads the tree arrays, so memory-mapping them lets
+    ``evaluate`` run on a machine that is low on commit memory.
+    """
+    try:
+        return joblib.load(model_file, mmap_mode="r")
+    except (TypeError, OSError, MemoryError):
+        return joblib.load(model_file)
+
+
 def cmd_evaluate(args: argparse.Namespace) -> int:
     params = load_params(args.params)
     target = params["data"].get("target", TARGET)
@@ -164,7 +176,7 @@ def cmd_evaluate(args: argparse.Namespace) -> int:
     train_frame, test_frame = prepare(params, args.data)
     features = feature_columns(test_frame.columns, target)
 
-    pipeline = joblib.load(model_file)
+    pipeline = load_model(model_file)
     metrics = compute_metrics(test_frame[target], pipeline.predict(test_frame[features]))
     metrics["model"] = params["model"]["name"]
     metrics["train_rows"] = len(train_frame)
@@ -181,6 +193,13 @@ def main(argv: list[str] | None = None) -> int:
         return handlers[args.command](args)
     except (FileNotFoundError, ValueError, KeyError) as error:
         print(f"error: {error}", file=sys.stderr)
+        return 1
+    except MemoryError:
+        print(
+            f"error: out of memory while running {args.command}; "
+            "close other programs or lower `model.params.n_estimators`, then retry",
+            file=sys.stderr,
+        )
         return 1
 
 
