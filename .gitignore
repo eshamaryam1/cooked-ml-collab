@@ -1,0 +1,23 @@
+# env
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env
+.env.*
+
+# data and models are tracked by DVC, never by Git
+data/raw/*
+data/processed/*
+models/*
+!data/raw/.gitkeep
+!models/.gitkeep
+
+# tooling caches
+.dvc/cache/
+.ipynb_checkpoints/
+.pytest_cache/
+.ruff_cache/
+mlruns/
+wandb/
+.DS_Store
