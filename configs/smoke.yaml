@@ -1,0 +1,28 @@
+# Smoke-test variant: a few hundred rows and a tiny model, so CI can run
+# the whole pipeline end to end in seconds.
+# Overridden by: uv run python -m cooked_ml.cli train --params configs/smoke.yaml
+
+seed: 42
+
+data:
+  raw_path: data/raw/california_housing.csv
+  cache_dir: data/raw/sklearn_cache
+  target: MedHouseVal
+  test_size: 0.2
+  max_rows: 500
+
+preprocessing:
+  scale: true
+  impute_strategy: median
+
+model:
+  name: random_forest
+  params:
+    n_estimators: 10
+    max_depth: 8
+    min_samples_leaf: 1
+    n_jobs: 1
+
+artifacts:
+  model_path: models/smoke_model.joblib
+  metrics_path: models/smoke_metrics.json
