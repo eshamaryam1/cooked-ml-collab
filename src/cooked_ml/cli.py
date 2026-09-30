@@ -30,22 +30,64 @@ from cooked_ml.data import (
 from cooked_ml.features import feature_columns
 from cooked_ml.models import build_pipeline
 
+GLOBAL_OPTIONS = ("--params", "--data")
+
+
+def reorder_global_options(argv: list[str]) -> list[str]:
+    """Move ``--params`` and ``--data`` in front of the subcommand.
+
+    argparse lets a subparser's defaults overwrite values already parsed by the
+    parent, so a flag written after the subcommand would silently fall back to
+    ``params.yaml``. Normalising the order keeps both spellings equivalent.
+    """
+    leading: list[str] = []
+    trailing: list[str] = []
+    tokens = list(argv)
+    index = 0
+    while index < len(tokens):
+        token = tokens[index]
+        if token in GLOBAL_OPTIONS and index + 1 < len(tokens):
+            leading += [token, tokens[index + 1]]
+            index += 2
+        elif any(token.startswith(f"{option}=") for option in GLOBAL_OPTIONS):
+            leading.append(token)
+            index += 1
+        else:
+            trailing.append(token)
+            index += 1
+    return leading + trailing
+
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(prog="cooked_ml", description="California Housing pipeline")
-    parser.add_argument(
+    common = argparse.ArgumentParser(add_help=False)
+    common.add_argument(
         "--params",
-        default=str(DEFAULT_PARAMS_PATH),
+        default=argparse.SUPPRESS,
         help="parameter file to use (default: params.yaml)",
     )
-    parser.add_argument("--data", default=None, help="override the raw CSV path")
+    common.add_argument("--data", default=argparse.SUPPRESS, help="override the raw CSV path")
+
+    parser = argparse.ArgumentParser(
+        prog="cooked_ml", description="California Housing pipeline", parents=[common]
+    )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    train = subparsers.add_parser("train", help="fetch data, fit the model and save it")
+    train = subparsers.add_parser(
+        "train", help="fetch data, fit the model and save it", parents=[common]
+    )
     train.add_argument("--force-download", action="store_true", help="re-fetch the raw CSV")
 
-    subparsers.add_parser("evaluate", help="score a saved model on the test split")
-    return parser.parse_args(argv)
+    subparsers.add_parser(
+        "evaluate", help="score a saved model on the test split", parents=[common]
+    )
+
+    tokens = sys.argv[1:] if argv is None else argv
+    args = parser.parse_args(reorder_global_options(tokens))
+    if not hasattr(args, "params"):
+        args.params = str(DEFAULT_PARAMS_PATH)
+    if not hasattr(args, "data"):
+        args.data = None
+    return args
 
 
 def compute_metrics(y_true: pd.Series | Any, y_pred: Any) -> dict[str, float]:

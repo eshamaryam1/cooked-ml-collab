@@ -10,7 +10,7 @@ import pytest
 from sklearn.ensemble import GradientBoostingRegressor, RandomForestRegressor
 from sklearn.linear_model import LinearRegression
 
-from cooked_ml.cli import compute_metrics
+from cooked_ml.cli import compute_metrics, parse_args
 from cooked_ml.config import load_params
 from cooked_ml.data import build_splits, load_raw
 from cooked_ml.features import feature_columns, make_preprocessor
@@ -109,3 +109,16 @@ def test_smoke_params_produce_a_cheap_model() -> None:
     assert isinstance(model, RandomForestRegressor)
     assert model.n_estimators == 10
     assert smoke["data"]["max_rows"] <= 1000
+
+
+def test_params_flag_works_before_and_after_the_subcommand() -> None:
+    before = parse_args(["--params", "configs/smoke.yaml", "evaluate"])
+    after = parse_args(["evaluate", "--params", "configs/smoke.yaml"])
+
+    assert before.params == after.params == "configs/smoke.yaml"
+    assert before.command == after.command == "evaluate"
+
+
+def test_params_default_to_the_root_file() -> None:
+    assert parse_args(["train"]).params == "params.yaml"
+    assert parse_args(["train", "--force-download"]).force_download is True
