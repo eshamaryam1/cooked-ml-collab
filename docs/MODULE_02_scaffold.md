@@ -265,6 +265,10 @@ Do this **before** Module 03, so the first PR already goes through protection. F
 
 Set the required status checks in Module 08, once the workflow exists.
 
+> **Note:** GitHub only allows `admin` on organization-owned repos, so Nimra could not be given
+> admin on this personal repo (the API returns 422). Esha, as owner, applied these rules via
+> `PUT /repos/…/branches/{branch}/protection` on 2026-10-01. See `PROGRESS.md`.
+
 ## Checkpoint evidence
 
 - [x] `git log main --oneline` shows the initial import
