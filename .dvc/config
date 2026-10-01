@@ -1,0 +1,4 @@
+[core]
+    remote = storage
+['remote "storage"']
+    url = https://dagshub.com/Nimra-Saleem29/cooked-ml-collab.dvc
