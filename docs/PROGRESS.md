@@ -93,8 +93,8 @@ Requirement: **2 authored + 2 reviewed per member**, at least one review with
 
 | # | Title | Author | Reviewer | Target | Outcome | Evidence note |
 |---|---|---|---|---|---|---|
-| 1 | | | | | | |
-| 2 | | | | | | |
+| 1 | docs: record branch protection and close module 02 | Esha | Nimra (approved) | dev | merged (squash `b117ca1`) | Module 02 close-out, `PROGRESS.md` + `MODULE_02_scaffold.md` |
+| 2 | chore: add pre-commit hooks for lint, notebooks, large files and secrets | Nimra | Esha (requested) | dev | open — [PR #2](https://github.com/eshamaryam1/cooked-ml-collab/pull/2) | `docs/evidence/03-precommit-*.txt` |
 | 3 | | | | | | |
 | 4 | | | | | | |
 | 5 | | | | | | |
