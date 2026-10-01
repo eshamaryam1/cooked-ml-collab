@@ -8,6 +8,7 @@ __pycache__/
 
 # data and models are tracked by DVC, never by Git
 data/raw/*
+!data/raw/*.dvc
 data/processed/*
 models/*
 !data/raw/.gitkeep
