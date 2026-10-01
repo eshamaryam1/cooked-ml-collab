@@ -42,7 +42,29 @@ Update the tables as you go — this file is the running log the two of us read 
     personal-account repo only has owner + write-collaborator roles — GitHub refuses an
     `admin` collaborator there (422), so Nimra cannot be given admin without moving the repo
     into an org. Status checks to be added in Module 08.
-- [ ] **M03 — pre-commit & secrets** (Nimra) — started: — · done: —
+  - [ ] Default branch switched from `chore/check-push-esha` to `main` — repo admin, Settings →
+    General (not part of Module 02, but flagged while doing step 7)
+- [ ] **M03 — pre-commit & secrets** (Nimra) — started: 2026-10-01 · done: —
+  - [x] Branch `feat/pre-commit` from `dev`; `uv add --dev pre-commit detect-secrets` +
+    `uv run pre-commit install` (Esha runs the install in her clone too — pending)
+  - [x] `.pre-commit-config.yaml` — large files (1 MB cap), merge conflicts, YAML, EOF, trailing
+    whitespace, LF line endings, `ruff` + `ruff-format`, `nbstripout`, `detect-secrets`.
+    Deviations from the module doc: ruff hook pinned `v0.16.9` to match local ruff 0.16.9
+    (doc said `v0.8.4`, which would disagree with CI), nbstripout tag is `0.9.1` (doc said
+    `v1.9.1`, which does not exist), gitleaks dropped — its pre-commit hook is
+    `language: golang` and no Go toolchain is installed; detect-secrets alone satisfies the
+    "such as detect-secrets or gitleaks" requirement
+  - [x] `.secrets.baseline` generated with `detect-secrets scan` and committed — only the module
+    docs' own demo keys and one placeholder md5
+  - [x] Ruff config already in `pyproject.toml` from Module 02 (line-length 100, py312) — no
+    change needed, hook and future CI read the same file
+  - [x] `uv run pre-commit run --all-files` passes clean — log `docs/evidence/03-precommit-all-files.txt`
+  - [x] 5 MB file blocked: `big_blob.bin (5120 KB) exceeds 1024 KB` — log
+    `docs/evidence/03-precommit-large-file.txt`
+  - [x] Fake API key blocked by detect-secrets (high entropy + keyword + AWS key) — log
+    `docs/evidence/03-precommit-secret.txt`
+  - [ ] PNG screenshots under `docs/evidence/` (text logs committed; screenshots pending)
+  - [ ] PR `feat/pre-commit → dev` reviewed by Esha and merged (squash); branch deleted
 - [ ] **M04 — DVC data versioning** (Nimra) — started: — · done: —
 - [ ] **M05 — Notebooks** (Esha) — started: — · done: —
 - [ ] **M06 — Reproducible pipeline** (Esha) — started: — · done: —
@@ -56,7 +78,7 @@ Update the tables as you go — this file is the running log the two of us read 
 |---|---|---|---|---|
 | 1 | All members can push a branch | — | 2026-09-30 | ☑ (`87d044c` Esha, `880bed7` Nimra) |
 | 2 | 3 protected branches exist; `git log` on `main` shows the initial import | Esha | 2026-10-01 | ☑ (import on `main`; rules on `main`/`staging`/`dev`, direct push to `dev` rejected GH006) |
-| 3 | 5 MB file and a fake API key are both blocked (screenshot) | — | — | ☐ |
+| 3 | 5 MB file and a fake API key are both blocked (screenshot) | Nimra | 2026-10-01 | ☑ (`big_blob.bin` 5120 KB refused; detect-secrets refused fake keys — logs in `docs/evidence/`, PNG screenshots pending) |
 | 4 | CSV is not in Git history, only its `.dvc` pointer | — | — | ☐ |
 | 5 | PR diff shows no cell outputs or execution counts | — | — | ☐ |
 | 6 | Teammate on a fresh clone: `dvc pull && dvc repro` gives identical metrics | — | — | ☐ |
@@ -71,8 +93,8 @@ Requirement: **2 authored + 2 reviewed per member**, at least one review with
 
 | # | Title | Author | Reviewer | Target | Outcome | Evidence note |
 |---|---|---|---|---|---|---|
-| 1 | | | | | | |
-| 2 | | | | | | |
+| 1 | docs: record branch protection and close module 02 | Esha | Nimra (approved) | dev | merged (squash `b117ca1`) | Module 02 close-out, `PROGRESS.md` + `MODULE_02_scaffold.md` |
+| 2 | chore: add pre-commit hooks for lint, notebooks, large files and secrets | Nimra | Esha (requested) | dev | open — [PR #2](https://github.com/eshamaryam1/cooked-ml-collab/pull/2) | `docs/evidence/03-precommit-*.txt` |
 | 3 | | | | | | |
 | 4 | | | | | | |
 | 5 | | | | | | |

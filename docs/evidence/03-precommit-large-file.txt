@@ -1,0 +1,21 @@
+check for added large files..............................................Failed
+- hook id: check-added-large-files
+- exit code: 1
+
+big_blob.bin (5120 KB) exceeds 1024 KB.
+
+check for merge conflicts................................................Passed
+check yaml...........................................(no files to check)Skipped
+fix end of files.........................................................Failed
+- hook id: end-of-file-fixer
+- exit code: 1
+- files were modified by this hook
+
+Fixing big_blob.bin
+
+trim trailing whitespace.................................................Passed
+mixed line ending........................................................Passed
+ruff (legacy alias)..................................(no files to check)Skipped
+ruff format..........................................(no files to check)Skipped
+nbstripout...........................................(no files to check)Skipped
+Detect secrets...........................................................Passed
