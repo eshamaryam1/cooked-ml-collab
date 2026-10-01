@@ -31,7 +31,7 @@ Do these in order. Each one depends on the previous.
 |---|---|---|---|
 | 1 | [Module 01 — Team & repo setup](MODULE_01_setup.md) | both | Not started |
 | 2 | [Module 02 — Scaffold & initial import](MODULE_02_scaffold.md) | both | Complete |
-| 3 | [Module 03 — Guard rails: pre-commit & secrets](MODULE_03_precommit.md) | Nimra | Not started |
+| 3 | [Module 03 — Guard rails: pre-commit & secrets](MODULE_03_precommit.md) | Nimra | In progress |
 | 4 | [Module 04 — Version the data with DVC](MODULE_04_dvc.md) | Nimra | Not started |
 | 5 | [Module 05 — Notebooks done right](MODULE_05_notebooks.md) | Esha | Not started |
 | 6 | [Module 06 — Reproducible DVC pipeline](MODULE_06_pipeline.md) | Esha | Not started |
