@@ -174,11 +174,14 @@ Open PR `feat/pre-commit → dev`. Esha reviews, checks out the branch, runs
 
 ## Checkpoint evidence
 
-- [x] A 5 MB file is refused with `check-added-large-files`
-- [x] A fake API key is refused by the secret scanner
-- [x] Both screenshots saved under `docs/evidence/`
-- [x] `uv run pre-commit run --all-files` passes clean
-- [x] PR reviewed and merged into `dev`; branch deleted
+- [x] A 5 MB file is refused with `check-added-large-files` — log:
+  `docs/evidence/03-precommit-large-file.txt`
+- [x] A fake API key is refused by the secret scanner — log:
+  `docs/evidence/03-precommit-secret.txt`
+- [ ] PNG screenshots saved under `docs/evidence/` (text logs committed; screenshots pending)
+- [x] `uv run pre-commit run --all-files` passes clean — log:
+  `docs/evidence/03-precommit-all-files.txt`
+- [ ] PR reviewed and merged into `dev`; branch deleted
 
 ## Gotchas
 

@@ -116,6 +116,7 @@ uv run pre-commit run --all-files
 
 ```bash
 uv sync                      # creates .venv from uv.lock
+uv run pre-commit install    # hooks run on every commit; do this once per clone
 uv run python -m cooked_ml.cli train
 uv run python -m cooked_ml.cli evaluate
 uv run pytest tests/
