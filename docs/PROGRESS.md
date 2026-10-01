@@ -63,7 +63,7 @@ Update the tables as you go — this file is the running log the two of us read 
     `docs/evidence/03-precommit-large-file.txt`
   - [x] Fake API key blocked by detect-secrets (high entropy + keyword + AWS key) — log
     `docs/evidence/03-precommit-secret.txt`
-  - [ ] PNG screenshots under `docs/evidence/` (text logs committed; screenshots pending)
+  - [x] PNG screenshots under `docs/evidence/`
   - [ ] PR `feat/pre-commit → dev` reviewed by Esha and merged (squash); branch deleted
 - [ ] **M04 — DVC data versioning** (Nimra) — started: — · done: —
 - [ ] **M05 — Notebooks** (Esha) — started: — · done: —
@@ -78,7 +78,7 @@ Update the tables as you go — this file is the running log the two of us read 
 |---|---|---|---|---|
 | 1 | All members can push a branch | — | 2026-09-30 | ☑ (`87d044c` Esha, `880bed7` Nimra) |
 | 2 | 3 protected branches exist; `git log` on `main` shows the initial import | Esha | 2026-10-01 | ☑ (import on `main`; rules on `main`/`staging`/`dev`, direct push to `dev` rejected GH006) |
-| 3 | 5 MB file and a fake API key are both blocked (screenshot) | Nimra | 2026-10-01 | ☑ (`big_blob.bin` 5120 KB refused; detect-secrets refused fake keys — logs in `docs/evidence/`, PNG screenshots pending) |
+| 3 | 5 MB file and a fake API key are both blocked (screenshot) | Nimra | 2026-10-01 | ☑ (`big_blob.bin` 5120 KB refused; detect-secrets refused fake keys — logs + PNG screenshots in `docs/evidence/`) |
 | 4 | CSV is not in Git history, only its `.dvc` pointer | — | — | ☐ |
 | 5 | PR diff shows no cell outputs or execution counts | — | — | ☐ |
 | 6 | Teammate on a fresh clone: `dvc pull && dvc repro` gives identical metrics | — | — | ☐ |
