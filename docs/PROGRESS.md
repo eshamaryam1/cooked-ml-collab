@@ -3,7 +3,7 @@
 Tick a box only when the checkpoint in that module is actually demonstrated in the repo.
 Update the tables as you go — this file is the running log the two of us read before every PR.
 
-**Overall status: 0 / 9 modules complete**
+**Overall status: 1 / 9 modules complete**
 
 ---
 
@@ -18,7 +18,7 @@ Update the tables as you go — this file is the running log the two of us read 
   - [x] Nimra's clone created and her identity configured — commit `880bed7` authored by
     `Nimra-Saleem29 <ns5999424@gmail.com>` on `chore/check-push-nimra`
   - [x] Nimra proved she can push — branch `chore/check-push-nimra`, commit `880bed7`
-- [ ] **M02 — Scaffold & initial import** (both) — started: 2026-09-30 · done: —
+- [x] **M02 — Scaffold & initial import** (both) — started: 2026-09-30 · done: 2026-10-01
   - [x] `uv` 0.12.21 + CPython 3.12.14 installed (pins in `.python-version`)
   - [x] `pyproject.toml` + `uv.lock` committed and pushed — `d15f8a8`
   - [x] `src/cooked_ml/` refactor: `config`, `data`, `features`, `models`, `cli`
@@ -35,8 +35,13 @@ Update the tables as you go — this file is the running log the two of us read 
     sha256 `05817eef1b24d07428073579db624db1eeccda974211a026c26d6900dd9bb456`, matches Esha
   - [x] `staging` + `dev` created from `main` and pushed — Esha, step 6 — all three branches
     point at the same commit
-  - [ ] Branch protection on `main`, `staging`, `dev` — Nimra, step 7 (GitHub → Settings →
-    Branches, after step 6 lands)
+  - [x] Branch protection on `main`, `staging`, `dev` — applied 2026-10-01 by Esha (repo
+    owner) via the API: PR required (1 approval), conversation resolution, no force pushes, no
+    deletions, `enforce_admins` on, no bypass. Direct push to `dev` rejected: `GH006 …
+    Changes must be made through a pull request`. Done by Esha instead of Nimra because a
+    personal-account repo only has owner + write-collaborator roles — GitHub refuses an
+    `admin` collaborator there (422), so Nimra cannot be given admin without moving the repo
+    into an org. Status checks to be added in Module 08.
 - [ ] **M03 — pre-commit & secrets** (Nimra) — started: — · done: —
 - [ ] **M04 — DVC data versioning** (Nimra) — started: — · done: —
 - [ ] **M05 — Notebooks** (Esha) — started: — · done: —
@@ -50,7 +55,7 @@ Update the tables as you go — this file is the running log the two of us read 
 | Phase | Checkpoint | Verified by | Date | Status |
 |---|---|---|---|---|
 | 1 | All members can push a branch | — | 2026-09-30 | ☑ (`87d044c` Esha, `880bed7` Nimra) |
-| 2 | 3 protected branches exist; `git log` on `main` shows the initial import | — | — | ☐ (Esha's import is on `main`; branches + protection pending) |
+| 2 | 3 protected branches exist; `git log` on `main` shows the initial import | Esha | 2026-10-01 | ☑ (import on `main`; rules on `main`/`staging`/`dev`, direct push to `dev` rejected GH006) |
 | 3 | 5 MB file and a fake API key are both blocked (screenshot) | — | — | ☐ |
 | 4 | CSV is not in Git history, only its `.dvc` pointer | — | — | ☐ |
 | 5 | PR diff shows no cell outputs or execution counts | — | — | ☐ |
