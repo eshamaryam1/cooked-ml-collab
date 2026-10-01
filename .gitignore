@@ -6,9 +6,12 @@ __pycache__/
 .env
 .env.*
 
-# data and models are tracked by DVC, never by Git
-data/raw/*
-!data/raw/*.dvc
+# data and models are tracked by DVC, never by Git.
+# No blanket `data/raw/*` here: dulwich (DVC's default git backend) treats a
+# `dir/*` pattern as "the directory itself is ignored" and prunes it from the
+# walk DVC uses to find *.dvc pointers, which silently hides them from
+# status/push/pull. DVC writes data/raw/.gitignore itself on `dvc add`.
+data/raw/sklearn_cache/
 data/processed/*
 models/*
 !data/raw/.gitkeep
