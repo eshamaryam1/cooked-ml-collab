@@ -65,7 +65,25 @@ Update the tables as you go — this file is the running log the two of us read 
     `docs/evidence/03-precommit-secret.txt`
   - [x] PNG screenshots under `docs/evidence/`
   - [ ] PR `feat/pre-commit → dev` reviewed by Esha and merged (squash); branch deleted
-- [ ] **M04 — DVC data versioning** (Nimra) — started: — · done: —
+- [ ] **M04 — DVC data versioning** (Nimra) — started: 2026-10-01 · done: —
+  - [x] CSV hash checked: `git hash-object` = `8edefff052981e57ff00439301b7776d3ff93998`
+    (Esha's must match — pending confirmation)
+  - [x] Branch `data/initial-dataset`; `uv add "dvc[s3]"` + `uv run dvc init`
+  - [x] `data/raw/california_housing.csv.dvc` committed; the CSV is git-ignored by DVC's own
+    `data/raw/.gitignore`, `git ls-files` shows only `tests/fixtures/sample.csv`
+  - [x] Gotcha found & fixed: Module 02's blanket `data/raw/*` made dulwich (DVC's default git
+    backend) prune `data\raw\` during its walk, hiding the `.dvc` pointer from
+    `dvc status/push/pull` ("Everything is up to date" while pushing nothing). Replaced with
+    DVC-managed per-file ignores — commit `5206509`
+  - [x] detect-secrets flagged the pointer's md5 as high entropy — allowlisted with an inline
+    `# pragma: allowlist secret` on the `md5:` line (survives `dvc add` rewrites)
+  - [x] Remote `storage` = `https://dagshub.com/Nimra-Saleem29/cooked-ml-collab.dvc`; token only
+    in gitignored `.dvc/config.local` (`.dvc/config` holds the URL, no credentials)
+  - [x] `dvc push` → "1 file pushed"; `dvc status -c` → "Cache and remote 'storage' are in sync"
+  - [x] `git log --all -- <csv>` and `git rev-list --objects --all` both empty — screenshot for
+    `REPORT.md`
+  - [ ] Esha fresh-clone `dvc pull` + `(20640, 9)` check pasted in the PR
+  - [ ] PR `data/initial-dataset → dev` reviewed, squash-merged; branch deleted
 - [ ] **M05 — Notebooks** (Esha) — started: — · done: —
 - [ ] **M06 — Reproducible pipeline** (Esha) — started: — · done: —
 - [ ] **M07 — Experiments & PRs** (both) — started: — · done: —
@@ -132,8 +150,9 @@ Winner promoted via `dvc exp apply`: ______ (PR link: ______)
 
 ## Screenshots needed for `REPORT.md`
 
-- [ ] Pre-commit blocking a 5 MB file
-- [ ] Pre-commit / secret scanner blocking a fake API key
+- [x] Pre-commit blocking a 5 MB file (`docs/evidence/03-precommit-large-file.png`)
+- [x] Pre-commit / secret scanner blocking a fake API key (`docs/evidence/03-precommit-secret.png`)
+- [ ] `git log --all -- data/raw/california_housing.csv` empty — no data in Git history (M04)
 - [ ] A failing CI check (red) that blocks the merge
 - [ ] A passing CI check (green)
 
