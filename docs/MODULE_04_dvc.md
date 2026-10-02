@@ -169,6 +169,16 @@ uv run dvc push            # re-upload that old version
 
 ## Gotchas
 
+- **Do not blanket-ignore a directory that will hold `.dvc` pointers.** dulwich (DVC's default
+  git backend on this setup) treats a `dir/*` pattern as "the directory itself is ignored" and
+  prunes it from the walk DVC uses to find `.dvc` files — `dvc status` then reports "no data
+  tracked" and `dvc push` says "Everything is up to date" while uploading nothing. Let
+  `dvc add` write `data/<dir>/.gitignore` per file instead (fixed in commit `5206509`).
+- `detect-secrets` flags the pointer's md5 as a high-entropy secret — keep an inline
+  `# pragma: allowlist secret` on the `md5:` line of the `.dvc` file (`dvc add` preserves it).
+- DVC 3 remote auth is three settings, not one:
+  `dvc remote modify storage --local auth basic` + `user` + `password` (token).
+
 - If a dataset ever *does* land in history, `git rm` is not enough. Use
   `git filter-repo --path data/raw/california_housing.csv --invert-paths`, then force-push and tell
   your teammate to re-clone. Better to avoid it entirely.
