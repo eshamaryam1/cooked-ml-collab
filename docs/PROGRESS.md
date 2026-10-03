@@ -136,8 +136,9 @@ Update the tables as you go — this file is the running log the two of us read 
     timestamp. `dvc_lock_md5` from the doc's example dropped: `dvc.lock` is rewritten by the
     stage that would hash it, so it changed on every run (3 forced runs differed only in that
     field before it was removed)
-  - [x] Two consecutive `uv run dvc repro --force` → byte-identical `metrics.json`
-    (sha256 `F1F00B31…C207EF5B7E79`, 3 runs in a row)
+  - [x] Two consecutive `uv run dvc repro --force` at commit `b3bf3bc` → byte-identical
+    `metrics.json`, sha256 `4C95763D23BFF2937AB8EED5F037224566E1F3A4E47251830AFFBF26CDDE9DAC`
+    (`commit_sha` in the file equals `git rev-parse HEAD` of that commit)
   - [x] Shipped metrics **r2 0.7913, MAE 0.3454**. Hyperparameters deviate from the doc's
     `max_depth: 6`, which measures 0.6801 / 0.4604 (the doc's example `r2 0.8157` is not
     reachable there); `n_estimators: 100`, `max_depth: 12` keeps the artefact at 23.4 MB —

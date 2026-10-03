@@ -1,0 +1,102 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: uv run python -m cooked_ml.cli prepare
+    deps:
+    - path: data/raw/california_housing.csv
+      hash: md5
+      md5: b2a3a690f28c00947f021c0c721492f3
+      size: 1426282
+    - path: params.yaml
+      hash: md5
+      md5: d3e96957a6e240f75632d33bd71d4575
+      size: 611
+    - path: src/cooked_ml/cli.py
+      hash: md5
+      md5: 2c2ab0cae020fb045dc664a671d53a47
+      size: 10681
+    - path: src/cooked_ml/config.py
+      hash: md5
+      md5: 6c860fbeebfe42c9d18a545385928da1
+      size: 3929
+    - path: src/cooked_ml/data.py
+      hash: md5
+      md5: 96de0a50dc98158ad0348b55c6ea71be
+      size: 5075
+    - path: src/cooked_ml/features.py
+      hash: md5
+      md5: 4a6713085e2201b0086c3b538363d7ea
+      size: 1811
+    outs:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: c9371e937007c2bb8a72705a50ca2525
+      size: 284918
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 26a4ba5db29872e0a4d7ba8e830e109d
+      size: 1141450
+  train:
+    cmd: uv run python -m cooked_ml.cli train
+    deps:
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 26a4ba5db29872e0a4d7ba8e830e109d
+      size: 1141450
+    - path: params.yaml
+      hash: md5
+      md5: d3e96957a6e240f75632d33bd71d4575
+      size: 611
+    - path: src/cooked_ml/cli.py
+      hash: md5
+      md5: 2c2ab0cae020fb045dc664a671d53a47
+      size: 10681
+    - path: src/cooked_ml/config.py
+      hash: md5
+      md5: 6c860fbeebfe42c9d18a545385928da1
+      size: 3929
+    - path: src/cooked_ml/features.py
+      hash: md5
+      md5: 4a6713085e2201b0086c3b538363d7ea
+      size: 1811
+    - path: src/cooked_ml/models.py
+      hash: md5
+      md5: 5020efcd2aae2db599b5edd06dd5f9c1
+      size: 1575
+    outs:
+    - path: models/model.joblib
+      hash: md5
+      md5: d81199a1d1582beb2d2ff8b281673d26
+      size: 24545427
+  evaluate:
+    cmd: uv run python -m cooked_ml.cli evaluate
+    deps:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: c9371e937007c2bb8a72705a50ca2525
+      size: 284918
+    - path: models/model.joblib
+      hash: md5
+      md5: d81199a1d1582beb2d2ff8b281673d26
+      size: 24545427
+    - path: params.yaml
+      hash: md5
+      md5: d3e96957a6e240f75632d33bd71d4575
+      size: 611
+    - path: src/cooked_ml/cli.py
+      hash: md5
+      md5: 2c2ab0cae020fb045dc664a671d53a47
+      size: 10681
+    - path: src/cooked_ml/config.py
+      hash: md5
+      md5: 6c860fbeebfe42c9d18a545385928da1
+      size: 3929
+    - path: src/cooked_ml/data.py
+      hash: md5
+      md5: 96de0a50dc98158ad0348b55c6ea71be
+      size: 5075
+    outs:
+    - path: metrics.json
+      hash: md5
+      md5: 731a60cf7f54fbeb8ed04052d7f33d91
+      size: 592

@@ -1,0 +1,23 @@
+{
+  "r2": 0.791325841163286,
+  "mae": 0.3454198965751815,
+  "n_train": 16512,
+  "n_test": 4128,
+  "seed": 42,
+  "commit_sha": "b3bf3bc997c6fe53d90742c4d8667c0365d64ef7",
+  "params": {
+    "model": "random_forest",
+    "n_estimators": 100,
+    "max_depth": 12,
+    "min_samples_leaf": 1,
+    "test_size": 0.2,
+    "scale": true,
+    "drop_duplicates": true,
+    "max_rows": null
+  },
+  "data": {
+    "raw_path": "data/raw/california_housing.csv",
+    "raw_sha256": "05817eef1b24d07428073579db624db1eeccda974211a026c26d6900dd9bb456",
+    "raw_dvc_md5": "b2a3a690f28c00947f021c0c721492f3"
+  }
+}
