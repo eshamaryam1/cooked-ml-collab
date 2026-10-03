@@ -112,6 +112,28 @@ def save_splits(
     return paths
 
 
+def read_splits(out_dir: Path | str) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Load the processed splits written by :func:`save_splits`.
+
+    The ``prepare`` stage is the only writer, so ``train`` and ``evaluate``
+    score exactly the rows DVC hashed rather than re-deriving them.
+    """
+    directory = Path(out_dir)
+    missing = [name for name in ("train.csv", "test.csv") if not (directory / name).is_file()]
+    if missing:
+        raise FileNotFoundError(
+            f"processed split(s) missing from {directory}: {', '.join(missing)}; "
+            "run the prepare stage first"
+        )
+
+    train_frame = pd.read_csv(directory / "train.csv")
+    test_frame = pd.read_csv(directory / "test.csv")
+    for name, part in (("train.csv", train_frame), ("test.csv", test_frame)):
+        if TARGET not in part.columns:
+            raise ValueError(f"{directory / name} has no target column {TARGET!r}")
+    return train_frame, test_frame
+
+
 def file_hash(path: Path | str, algorithm: str = "sha256") -> str:
     """Hash a file so both members can compare their local copies."""
     digest = hashlib.new(algorithm)

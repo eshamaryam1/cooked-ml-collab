@@ -5,19 +5,24 @@ from __future__ import annotations
 from pathlib import Path
 from types import SimpleNamespace
 
+import numpy as np
 import pandas as pd
 import pytest
 
 from cooked_ml import data as data_module
+from cooked_ml.cli import run_prepare
 from cooked_ml.config import load_params
 from cooked_ml.data import (
     build_splits,
     ensure_raw_dataset,
     file_hash,
     load_raw,
+    read_splits,
     save_splits,
     write_csv,
 )
+from cooked_ml.features import feature_columns
+from cooked_ml.models import build_pipeline
 
 FIXTURE = Path(__file__).parent / "fixtures" / "sample.csv"
 
@@ -141,6 +146,8 @@ def test_params_file_is_complete() -> None:
         assert section in params
     assert 0.0 < params["data"]["test_size"] < 1.0
     assert params["data"]["target"] == "MedHouseVal"
+    assert params["data"]["processed_dir"] == "data/processed"
+    assert params["data"]["drop_duplicates"] is True
 
 
 def test_params_smoke_variant_exists() -> None:
@@ -151,3 +158,65 @@ def test_params_smoke_variant_exists() -> None:
 
 def params_baseline_trees() -> int:
     return int(load_params()["model"]["params"]["n_estimators"])
+
+
+def test_scaler_is_fit_on_training_rows_only(frame: pd.DataFrame) -> None:
+    """Leakage guard: the scaler must never see the test rows.
+
+    The Module 02 starter scaled the whole dataset before splitting, which
+    pushes test statistics into training. The pipeline fits preprocessing
+    inside ``Pipeline.fit`` on the training split, so the scaler's stored means
+    are the training means and nothing else.
+    """
+    target = "MedHouseVal"
+    features = feature_columns(frame.columns, target)
+    train_frame, _ = build_splits(frame, test_size=0.2, seed=42)
+
+    params = load_params()
+    params["model"] = {
+        "name": "random_forest",
+        "params": {"n_estimators": 5, "max_depth": 3, "n_jobs": 1},
+    }
+    pipeline = build_pipeline(params, seed=42)
+    pipeline.fit(train_frame[features], train_frame[target])
+
+    scaler = pipeline.named_steps["preprocess"].named_steps["scale"]
+    np.testing.assert_allclose(scaler.mean_, train_frame[features].mean().to_numpy(), rtol=1e-9)
+    whole_frame_means = frame[features].mean().to_numpy()
+    assert not np.allclose(scaler.mean_, whole_frame_means)
+
+
+def test_run_prepare_writes_seeded_splits(tmp_path: Path) -> None:
+    params = load_params()
+    params["data"] = {**params["data"], "processed_dir": str(tmp_path / "processed")}
+
+    first = run_prepare(params, str(FIXTURE))
+    first_bytes = (tmp_path / "processed" / "train.csv").read_bytes()
+    second = run_prepare(params, str(FIXTURE))
+    second_bytes = (tmp_path / "processed" / "train.csv").read_bytes()
+
+    assert first == second
+    assert first_bytes == second_bytes
+    assert first["n_train"] + first["n_test"] == first["rows"]
+    assert (tmp_path / "processed" / "test.csv").is_file()
+
+
+def test_run_prepare_drops_duplicates_when_asked(tmp_path: Path, frame: pd.DataFrame) -> None:
+    source = tmp_path / "raw.csv"
+    pd.concat([frame, frame.head(10)], ignore_index=True).to_csv(source, index=False)
+    params = load_params()
+    params["data"] = {
+        **params["data"],
+        "processed_dir": str(tmp_path / "processed"),
+        "drop_duplicates": True,
+    }
+
+    report = run_prepare(params, str(source))
+
+    assert report["duplicates_dropped"] == 10
+    assert report["rows"] == len(frame)
+
+
+def test_read_splits_needs_the_prepare_stage(tmp_path: Path) -> None:
+    with pytest.raises(FileNotFoundError, match="prepare"):
+        read_splits(tmp_path)
