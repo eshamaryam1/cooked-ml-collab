@@ -160,7 +160,7 @@ Update the tables as you go — this file is the running log the two of us read 
   - [x] Nimra reviewed (diff checked out, 41 tests + `ruff` run on the branch, fresh-clone
     reproduction matched), approved; squash merge — [PR #6](https://github.com/eshamaryam1/cooked-ml-collab/pull/6)
     → squash `1622d4d`, branch `feat/dvc-pipeline` deleted from origin
-- [ ] **M07 — Experiments & PRs** (both) — started: — · done: —
+- [ ] **M07 — Experiments & PRs** (both) — started: 2026-10-03 · done: —
 - [ ] **M08 — CI** (Nimra) — started: — · done: —
 - [ ] **M09 — Release & report** (both) — started: — · done: —
 
@@ -209,14 +209,19 @@ Requirement: **3 experiments per member** (`dvc exp run`), compared with `dvc ex
 
 | Experiment | Member | Branch | Params change | r2 | MAE | Notes |
 |---|---|---|---|---|---|---|
-| exp001 | | | | | | |
-| exp002 | | | | | | |
-| exp003 | | | | | | |
+| exp-esha-d10 | Esha | `exp/esha-max-depth` | `model.params.max_depth: 12 → 10` | 0.77423 | 0.36595 | Shallower forest loses to base — real result, kept in the table |
+| exp-esha-d4 | Esha | `exp/esha-max-depth` | `model.params.max_depth: 12 → 4` | 0.59796 | 0.53151 | Depth collapse; honest negative result |
+| exp-esha-gbr | Esha | `exp/esha-max-depth` | `model.name: random_forest → gradient_boosting` | 0.81331 | 0.31727 | Best of the four rows so far; needs [PR #8](https://github.com/eshamaryam1/cooked-ml-collab/pull/8) to train at all |
 | exp004 | | | | | | |
 | exp005 | | | | | | |
 | exp006 | | | | | | |
 
-Winner promoted via `dvc exp apply`: ______ (PR link: ______)
+All three Esha runs at base `216f492` (= `e06970d` of [PR #8](https://github.com/eshamaryam1/cooked-ml-collab/pull/8),
+cherry-picked onto the exp branch); `exp/esha-max-depth` is pushed as evidence and never merged.
+Nimra's three still to run.
+
+Winner promoted via `dvc exp apply`: `exp-esha-gbr` (gradient_boosting, r2 0.81331) —
+[PR #10](https://github.com/eshamaryam1/cooked-ml-collab/pull/10)
 
 ## Experiment drift
 
