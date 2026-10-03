@@ -30,3 +30,7 @@ repos:
     hooks:
       - id: detect-secrets
         args: ["--baseline", ".secrets.baseline"]
+        # Written by `dvc repro`, not by hand: its hex strings are the commit SHA
+        # and content hashes of files already in the repo, never credentials.
+        # Re-baselining per run would churn .secrets.baseline on every pipeline run.
+        exclude: ^metrics\.json$

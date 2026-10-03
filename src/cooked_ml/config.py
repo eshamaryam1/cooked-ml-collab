@@ -7,13 +7,63 @@ location on one machine.
 
 from __future__ import annotations
 
+import os
+import random
+import subprocess
 from pathlib import Path
 from typing import Any
 
+import numpy as np
 import yaml
 
 DEFAULT_PARAMS_PATH = Path("params.yaml")
 SMOKE_PARAMS_PATH = Path("configs") / "smoke.yaml"
+
+
+def set_global_seed(seed: int) -> None:
+    """Seed every source of randomness a pipeline stage can touch.
+
+    Called first thing by ``prepare``, ``train`` and ``evaluate`` so that a
+    rerun replays the same numbers. ``PYTHONHASHSEED`` only affects processes
+    started after it is set, so it is recorded here for the next stage and the
+    seeded ``random_state`` arguments do the work inside this process.
+    """
+    os.environ["PYTHONHASHSEED"] = str(seed)
+    random.seed(seed)
+    np.random.seed(seed)
+
+
+def current_commit_sha() -> str:
+    """HEAD of the checkout that produced a run, or ``unknown`` outside Git."""
+    try:
+        return subprocess.check_output(
+            ["git", "rev-parse", "HEAD"],
+            text=True,
+            stderr=subprocess.DEVNULL,
+        ).strip()
+    except (subprocess.CalledProcessError, FileNotFoundError, OSError):
+        return "unknown"
+
+
+def dvc_pointer_md5(path: Path | str) -> str | None:
+    """Read the ``md5`` of the ``.dvc`` pointer that tracks ``path``.
+
+    The raw CSV lives in the DVC remote, so its pointer hash — not a local file
+    hash — is what a teammate on a fresh clone can compare against.
+    """
+    pointer = Path(path)
+    if not pointer.is_absolute():
+        pointer = resolve_path(pointer)
+    dvc_file = Path(f"{pointer}.dvc")
+    if not dvc_file.is_file():
+        return None
+    with dvc_file.open(encoding="utf-8") as handle:
+        payload = yaml.safe_load(handle) or {}
+    if not isinstance(payload, dict):
+        return None
+    outs = payload.get("outs") or [{}]
+    value = outs[0].get("md5") or outs[0].get("h")
+    return str(value) if value else None
 
 
 def project_root(start: Path | str | None = None) -> Path:

@@ -1,14 +1,18 @@
 # Smoke-test variant: a few hundred rows and a tiny model, so CI can run
 # the whole pipeline end to end in seconds.
-# Overridden by: uv run python -m cooked_ml.cli train --params configs/smoke.yaml
+# Writes to its own directories (data/processed_smoke, models/smoke_*) so a
+# smoke run can never be mistaken for the real pipeline's outputs.
+# Overridden by: uv run python -m cooked_ml.cli prepare --params configs/smoke.yaml
 
 seed: 42
 
 data:
   raw_path: data/raw/california_housing.csv
   cache_dir: data/raw/sklearn_cache
+  processed_dir: data/processed_smoke
   target: MedHouseVal
   test_size: 0.2
+  drop_duplicates: true
   max_rows: 500
 
 preprocessing:
