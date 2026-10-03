@@ -1,0 +1,38 @@
+stages:
+  prepare:
+    cmd: uv run python -m cooked_ml.cli prepare
+    deps:
+      - data/raw/california_housing.csv
+      - params.yaml
+      - src/cooked_ml/cli.py
+      - src/cooked_ml/config.py
+      - src/cooked_ml/data.py
+      - src/cooked_ml/features.py
+    outs:
+      - data/processed/train.csv
+      - data/processed/test.csv
+
+  train:
+    cmd: uv run python -m cooked_ml.cli train
+    deps:
+      - data/processed/train.csv
+      - params.yaml
+      - src/cooked_ml/cli.py
+      - src/cooked_ml/config.py
+      - src/cooked_ml/features.py
+      - src/cooked_ml/models.py
+    outs:
+      - models/model.joblib
+
+  evaluate:
+    cmd: uv run python -m cooked_ml.cli evaluate
+    deps:
+      - data/processed/test.csv
+      - models/model.joblib
+      - params.yaml
+      - src/cooked_ml/cli.py
+      - src/cooked_ml/config.py
+      - src/cooked_ml/data.py
+    metrics:
+      - metrics.json:
+          cache: false
