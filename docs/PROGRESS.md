@@ -3,7 +3,7 @@
 Tick a box only when the checkpoint in that module is actually demonstrated in the repo.
 Update the tables as you go — this file is the running log the two of us read before every PR.
 
-**Overall status: 4 / 9 modules complete**
+**Overall status: 5 / 9 modules complete**
 
 ---
 
@@ -115,7 +115,7 @@ Update the tables as you go — this file is the running log the two of us read 
   - [x] Nimra reviewed (restart kernel, run all cells, no outputs in the diff), approved; squash
     merged — [PR #5](https://github.com/eshamaryam1/cooked-ml-collab/pull/5) → squash `fb2b61e`,
     branch `feat/eda-notebook` deleted from origin
-- [ ] **M06 — Reproducible pipeline** (Esha) — started: 2026-10-03 · done: —
+- [x] **M06 — Reproducible pipeline** (Esha) — started: 2026-10-03 · done: 2026-10-03
   - [x] Branch `feat/dvc-pipeline` from `dev`; `uv run dvc pull` before starting
   - [x] `params.yaml` keeps the Module 02 schema — the module doc's `data.raw` / `split` /
     `preprocess` / `train` layout would have broken the merged notebook and ~35 tests; added
@@ -148,14 +148,18 @@ Update the tables as you go — this file is the running log the two of us read 
   - [x] `uv run pytest tests/ -q` → 41 passed; `ruff check .` + `ruff format --check .` clean;
     `uv run pre-commit run --all-files` green (detect-secrets now excludes the generated
     `metrics.json`, whose hex strings are content hashes)
-  - [ ] Nimra on a fresh clone: `dvc pull && dvc repro --force` → identical `metrics.json`,
-    pasted in the PR — **this is the graded checkpoint** (Esha's run at `b3bf3bc`:
-    `4C95763D…CDDE9DAC`)
+  - [x] Nimra on a fresh clone: `git clone` → `git checkout b3bf3bc` → `uv sync` → `dvc pull` →
+    `dvc repro --force` → identical `metrics.json`, hash pasted into
+    [PR #6](https://github.com/eshamaryam1/cooked-ml-collab/pull/6#issuecomment-5970244357) —
+    **the graded checkpoint**, 2026-10-03 (Esha's run and Nimra's run:
+    `4C95763D23BFF2937AB8EED5F037224566E1F3A4E47251830AFFBF26CDDE9DAC`; git blob
+    `dfab793c82186fd6a9bd342fa7e347ca9854afd4` both sides)
   - [x] PR `feat/dvc-pipeline → dev` opened with the checkpoint evidence and the deviations
     listed — [PR #6](https://github.com/eshamaryam1/cooked-ml-collab/pull/6), review requested
     from Nimra
-  - [ ] Nimra reviews (checks out the branch, runs `dvc repro`, confirms the fresh-clone match),
-    squash merge; branch deleted
+  - [x] Nimra reviewed (diff checked out, 41 tests + `ruff` run on the branch, fresh-clone
+    reproduction matched), approved; squash merge — [PR #6](https://github.com/eshamaryam1/cooked-ml-collab/pull/6)
+    → squash `1622d4d`, branch `feat/dvc-pipeline` deleted from origin
 - [ ] **M07 — Experiments & PRs** (both) — started: — · done: —
 - [ ] **M08 — CI** (Nimra) — started: — · done: —
 - [ ] **M09 — Release & report** (both) — started: — · done: —
@@ -169,7 +173,7 @@ Update the tables as you go — this file is the running log the two of us read 
 | 3 | 5 MB file and a fake API key are both blocked (screenshot) | Nimra | 2026-10-01 | ☑ (`big_blob.bin` 5120 KB refused; detect-secrets refused fake keys — logs + PNG screenshots in `docs/evidence/`) |
 | 4 | CSV is not in Git history, only its `.dvc` pointer | Esha | 2026-10-03 | ☑ (`git log --all` and `rev-list --objects --all` both empty; `docs/evidence/04-dvc-no-csv-history.png`) |
 | 5 | PR diff shows no cell outputs or execution counts | Nimra | 2026-10-03 | ☑ (Nimra approved PR #5; squash `fb2b61e` — notebook merged with `outputs=0`/`execution_count=0`) |
-| 6 | Teammate on a fresh clone: `dvc pull && dvc repro` gives identical metrics | — | — | ☐ |
+| 6 | Teammate on a fresh clone: `dvc pull && dvc repro` gives identical metrics | Nimra | 2026-10-03 | ☑ (fresh clone at `b3bf3bc`; SHA256 `4C95763D…CDDE9DAC` identical to Esha's, pasted in [PR #6 comment](https://github.com/eshamaryam1/cooked-ml-collab/pull/6#issuecomment-5970244357)) |
 | 7 | Every member is both author and reviewer; ≥1 "changes requested" review | — | — | ☐ |
 | 8 | A deliberately broken test causes a red check that blocks merging | — | — | ☐ |
 | 9 | `model-v1.0` exists on `main` and the independent reproduction matched | — | — | ☐ |
@@ -186,7 +190,7 @@ Requirement: **2 authored + 2 reviewed per member**, at least one review with
 | 3 | chore: add pre-commit hooks for lint, notebooks, large files and secrets | Nimra | Esha (approved) | dev | merged (squash `58264aa`) — [PR #3](https://github.com/eshamaryam1/cooked-ml-collab/pull/3) | `docs/evidence/03-precommit-*.txt` (screenshots PR) |
 | 4 | data: track california housing csv with dvc | Nimra | Esha (approved, fresh-clone verified) | dev | merged (squash `b6a2302`) — [PR #4](https://github.com/eshamaryam1/cooked-ml-collab/pull/4) | fresh-clone comment + `docs/evidence/04-dvc-no-csv-history.png` |
 | 5 | feat: add stripped eda notebook paired with jupytext script | Esha | Nimra (approved) | dev | merged (squash `fb2b61e`) — [PR #5](https://github.com/eshamaryam1/cooked-ml-collab/pull/5) | `notebooks/01-eda.ipynb` + `.py`, outputs/execution counts check `0 0` |
-| 6 | feat: add seeded dvc pipeline producing reproducible metrics | Esha | Nimra (review requested) | dev | open — [PR #6](https://github.com/eshamaryam1/cooked-ml-collab/pull/6) | byte-identical `metrics.json` (`4C95763D…`), leakage test, deviations listed in the body |
+| 6 | feat: add seeded dvc pipeline producing reproducible metrics | Esha | Nimra (approved) | dev | merged (squash `1622d4d`) — [PR #6](https://github.com/eshamaryam1/cooked-ml-collab/pull/6) | byte-identical `metrics.json` (`4C95763D…`) confirmed by Nimra on a fresh clone ([comment](https://github.com/eshamaryam1/cooked-ml-collab/pull/6#issuecomment-5970244357)), leakage test, deviations in the body |
 | 7 | | | | | | |
 | 8 | | | | | | |
 
