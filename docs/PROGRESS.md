@@ -160,7 +160,7 @@ Update the tables as you go — this file is the running log the two of us read 
   - [x] Nimra reviewed (diff checked out, 41 tests + `ruff` run on the branch, fresh-clone
     reproduction matched), approved; squash merge — [PR #6](https://github.com/eshamaryam1/cooked-ml-collab/pull/6)
     → squash `1622d4d`, branch `feat/dvc-pipeline` deleted from origin
-- [ ] **M07 — Experiments & PRs** (both) — started: — · done: —
+- [ ] **M07 — Experiments & PRs** (both) — started: 2026-10-03 · done: —
 - [ ] **M08 — CI** (Nimra) — started: — · done: —
 - [ ] **M09 — Release & report** (both) — started: — · done: —
 
@@ -192,11 +192,14 @@ Requirement: **2 authored + 2 reviewed per member**, at least one review with
 | 5 | feat: add stripped eda notebook paired with jupytext script | Esha | Nimra (approved) | dev | merged (squash `fb2b61e`) — [PR #5](https://github.com/eshamaryam1/cooked-ml-collab/pull/5) | `notebooks/01-eda.ipynb` + `.py`, outputs/execution counts check `0 0` |
 | 6 | feat: add seeded dvc pipeline producing reproducible metrics | Esha | Nimra (approved) | dev | merged (squash `1622d4d`) — [PR #6](https://github.com/eshamaryam1/cooked-ml-collab/pull/6) | byte-identical `metrics.json` (`4C95763D…`) confirmed by Nimra on a fresh clone ([comment](https://github.com/eshamaryam1/cooked-ml-collab/pull/6#issuecomment-5970244357)), leakage test, deviations in the body |
 | 7 | docs: record module 06 fresh-clone reproduction and close the module | Nimra | Esha (approved) | dev | merged (squash `6ffe5bb`) — [PR #7](https://github.com/eshamaryam1/cooked-ml-collab/pull/7) | Module 06 close-out: fresh-clone checkpoint recorded, `PROGRESS.md` M06 → done (5/9) |
-| 8 | | | | | | |
+| 8 | fix: ignore model params the selected estimator does not accept | Esha | Nimra (approved) | dev | merged (squash `74eb14e`) — [PR #8](https://github.com/eshamaryam1/cooked-ml-collab/pull/8) | checked out and ran: 45 tests, `ruff` clean, all three model families build from the shared `model.params` block, typo key still rejected |
+| 9 | docs: mark module 06 complete in the status table | Nimra | Esha (approved) | dev | merged (squash `9801ce0`) — [PR #9](https://github.com/eshamaryam1/cooked-ml-collab/pull/9) | `docs/README.md` Module 06 → Complete; PR-log row 7 |
+| 10 | feat: promote gradient boosting with r2 0.81331 from exp-esha-gbr | Esha | Nimra (approved) | dev | open — [PR #10](https://github.com/eshamaryam1/cooked-ml-collab/pull/10) | checkout ran clean (45 tests, provenance `c2ba5a5` = `gradient_boosting`); review comment carries Nimra's three experiment rows and the CRLF `dvc.lock` finding |
+| 11 | data: re-export raw csv with 5 duplicate rows so dedupe has a real effect | Nimra | Esha (review requested) | dev | open — [PR #11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11) | data v1 → v2 (`b2a3a690…` → `8a862f33…`), 20,640 → 20,645 rows, metrics unchanged |
 
 Required PRs to link in `REPORT.md`:
 
-- [ ] Data update PR (`data/<change>`)
+- [x] Data update PR (`data/<change>`) — [PR #11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11)
 - [ ] Conflict resolution PR
 - [ ] A review with "Changes requested"
 - [ ] Release PR `dev → staging` (titled `release: v1.0`)
@@ -220,7 +223,11 @@ Winner promoted via `dvc exp apply`: ______ (PR link: ______)
 
 ## Experiment drift
 
-- [ ] At least one `exp/` branch kept unmerged and explained in `REPORT.md` (branch: ______)
+- [ ] At least one `exp/` branch kept unmerged and explained in `REPORT.md` (branch: `exp/nimra-ldm`)
+  - Pushed to origin as evidence and **never merged**: linear regression on the same split scores
+    r2 **0.57579** / mae **0.53320** against the shipped forest's 0.79133 / 0.34542 — an honest
+    negative result. Promoting it would have cost ~0.22 r2, which is why it stays abandoned. The
+    written explanation lands in `REPORT.md` when Module 09 opens it (box stays unticked until then).
 
 ## Screenshots needed for `REPORT.md`
 
