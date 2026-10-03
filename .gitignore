@@ -13,6 +13,7 @@ __pycache__/
 # status/push/pull. DVC writes data/raw/.gitignore itself on `dvc add`.
 data/raw/sklearn_cache/
 data/processed/*
+data/processed_smoke/*
 models/*
 !data/raw/.gitkeep
 !models/.gitkeep

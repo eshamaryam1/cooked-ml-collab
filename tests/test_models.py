@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import joblib
@@ -11,9 +12,9 @@ import pytest
 from sklearn.ensemble import GradientBoostingRegressor, RandomForestRegressor
 from sklearn.linear_model import LinearRegression
 
-from cooked_ml.cli import compute_metrics, load_model, main, parse_args
-from cooked_ml.config import load_params
-from cooked_ml.data import build_splits, load_raw
+from cooked_ml.cli import build_metrics, compute_metrics, load_model, main, parse_args
+from cooked_ml.config import current_commit_sha, dvc_pointer_md5, load_params
+from cooked_ml.data import build_splits, file_hash, load_raw
 from cooked_ml.features import feature_columns, make_preprocessor
 from cooked_ml.models import build_model, build_pipeline
 
@@ -142,3 +143,35 @@ def test_cli_turns_errors_into_a_non_zero_exit(tmp_path: Path) -> None:
     missing = str(tmp_path / "missing.yaml")
     assert main(["train", "--params", missing]) == 1
     assert main(["evaluate", "--params", missing]) == 1
+
+
+def test_prepare_is_a_subcommand() -> None:
+    assert parse_args(["prepare"]).command == "prepare"
+    assert parse_args(["evaluate"]).command == "evaluate"
+
+
+def test_metrics_payload_is_byte_stable_and_records_provenance() -> None:
+    """The Module 06 checkpoint: no volatile fields, SHA logged with the run."""
+    params = load_params()
+    metrics = {"r2": 0.5, "mae": 0.25}
+    if not Path(params["data"]["raw_path"]).is_file():
+        pytest.skip("raw csv not fetched — run `uv run dvc pull` first")
+
+    first = build_metrics(params, metrics, n_train=10, n_test=5)
+    second = build_metrics(params, metrics, n_train=10, n_test=5)
+
+    assert json.dumps(first) == json.dumps(second)
+    assert "timestamp" not in json.dumps(first)
+    assert set(first) == {
+        "r2",
+        "mae",
+        "n_train",
+        "n_test",
+        "seed",
+        "commit_sha",
+        "params",
+        "data",
+    }
+    assert first["commit_sha"] == current_commit_sha()
+    assert first["data"]["raw_dvc_md5"] == dvc_pointer_md5(params["data"]["raw_path"])
+    assert first["data"]["raw_sha256"] == file_hash(params["data"]["raw_path"])

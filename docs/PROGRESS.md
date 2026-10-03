@@ -3,7 +3,7 @@
 Tick a box only when the checkpoint in that module is actually demonstrated in the repo.
 Update the tables as you go — this file is the running log the two of us read before every PR.
 
-**Overall status: 3 / 9 modules complete**
+**Overall status: 4 / 9 modules complete**
 
 ---
 
@@ -92,7 +92,7 @@ Update the tables as you go — this file is the running log the two of us read 
   - [x] PR `data/initial-dataset → dev` reviewed, squash-merged; branch deleted —
     [PR #4](https://github.com/eshamaryam1/cooked-ml-collab/pull/4) → squash `b6a2302`,
     approved by Esha; branch gone from origin
-- [ ] **M05 — Notebooks** (Esha) — started: 2026-10-03 · done: —
+- [x] **M05 — Notebooks** (Esha) — started: 2026-10-03 · done: 2026-10-03
   - [x] Branch `feat/eda-notebook` from `dev`
   - [x] `notebooks/01-eda.ipynb` runs top to bottom from a fresh kernel — executed twice with
     `uv run jupyter nbconvert --to notebook --execute --inplace`; covers setup, shape/dtypes/head,
@@ -112,9 +112,50 @@ Update the tables as you go — this file is the running log the two of us read 
     notebook prose)
   - [x] PR `feat/eda-notebook → dev` opened — [PR #5](https://github.com/eshamaryam1/cooked-ml-collab/pull/5),
     `0 0` outputs check pasted in the body
-  - [ ] Nimra reviews (restart kernel, run all cells, confirm no outputs in the diff), squash
-    merge; branch deleted
-- [ ] **M06 — Reproducible pipeline** (Esha) — started: — · done: —
+  - [x] Nimra reviewed (restart kernel, run all cells, no outputs in the diff), approved; squash
+    merged — [PR #5](https://github.com/eshamaryam1/cooked-ml-collab/pull/5) → squash `fb2b61e`,
+    branch `feat/eda-notebook` deleted from origin
+- [ ] **M06 — Reproducible pipeline** (Esha) — started: 2026-10-03 · done: —
+  - [x] Branch `feat/dvc-pipeline` from `dev`; `uv run dvc pull` before starting
+  - [x] `params.yaml` keeps the Module 02 schema — the module doc's `data.raw` / `split` /
+    `preprocess` / `train` layout would have broken the merged notebook and ~35 tests; added
+    `data.processed_dir` + `data.drop_duplicates` instead (deviation recorded like Module 03)
+  - [x] `configs/smoke.yaml` mirrors it with `processed_dir: data/processed_smoke` and
+    `max_rows: 500`, so a smoke run can never overwrite the real pipeline's outputs
+  - [x] `set_global_seed()` in `src/cooked_ml/config.py` called first by all three stages;
+    `PYTHONHASHSEED` set next to `random.seed`/`np.random.seed`, `random_state=seed` on
+    `train_test_split` and `RandomForestRegressor`, `n_jobs: 1` in `params.yaml`
+  - [x] Stage split in `src/cooked_ml/cli.py` — `prepare` (load → optional dedupe → seeded split
+    → `data/processed/{train,test}.csv`), `train` (fit the sklearn `Pipeline` on the processed
+    training split → `models/model.joblib`), `evaluate` (`metrics.json`); wired in `dvc.yaml`
+  - [x] Leakage fix held: the preprocessor is fitted inside `Pipeline.fit` on
+    `data/processed/train.csv` only — `test_scaler_is_fit_on_training_rows_only` asserts the
+    scaler's means equal the training means and differ from the whole-frame means
+  - [x] `metrics.json`: r2, MAE, `n_train`/`n_test`, seed, `commit_sha` (`git rev-parse HEAD`),
+    the params used, the raw CSV sha256 and its `.dvc` pointer md5 — fixed key order, no
+    timestamp. `dvc_lock_md5` from the doc's example dropped: `dvc.lock` is rewritten by the
+    stage that would hash it, so it changed on every run (3 forced runs differed only in that
+    field before it was removed)
+  - [x] Two consecutive `uv run dvc repro --force` at commit `b3bf3bc` → byte-identical
+    `metrics.json`, sha256 `4C95763D23BFF2937AB8EED5F037224566E1F3A4E47251830AFFBF26CDDE9DAC`
+    (`commit_sha` in the file equals `git rev-parse HEAD` of that commit)
+  - [x] Shipped metrics **r2 0.7913, MAE 0.3454**. Hyperparameters deviate from the doc's
+    `max_depth: 6`, which measures 0.6801 / 0.4604 (the doc's example `r2 0.8157` is not
+    reachable there); `n_estimators: 100`, `max_depth: 12` keeps the artefact at 23.4 MB —
+    the Module 02 forest was 289 MB and could not be pushed
+  - [x] `uv run dvc push` → "3 files pushed"; `uv run dvc status -c` → "Cache and remote
+    'storage' are in sync"
+  - [x] `uv run pytest tests/ -q` → 41 passed; `ruff check .` + `ruff format --check .` clean;
+    `uv run pre-commit run --all-files` green (detect-secrets now excludes the generated
+    `metrics.json`, whose hex strings are content hashes)
+  - [ ] Nimra on a fresh clone: `dvc pull && dvc repro --force` → identical `metrics.json`,
+    pasted in the PR — **this is the graded checkpoint** (Esha's run at `b3bf3bc`:
+    `4C95763D…CDDE9DAC`)
+  - [x] PR `feat/dvc-pipeline → dev` opened with the checkpoint evidence and the deviations
+    listed — [PR #6](https://github.com/eshamaryam1/cooked-ml-collab/pull/6), review requested
+    from Nimra
+  - [ ] Nimra reviews (checks out the branch, runs `dvc repro`, confirms the fresh-clone match),
+    squash merge; branch deleted
 - [ ] **M07 — Experiments & PRs** (both) — started: — · done: —
 - [ ] **M08 — CI** (Nimra) — started: — · done: —
 - [ ] **M09 — Release & report** (both) — started: — · done: —
@@ -127,7 +168,7 @@ Update the tables as you go — this file is the running log the two of us read 
 | 2 | 3 protected branches exist; `git log` on `main` shows the initial import | Esha | 2026-10-01 | ☑ (import on `main`; rules on `main`/`staging`/`dev`, direct push to `dev` rejected GH006) |
 | 3 | 5 MB file and a fake API key are both blocked (screenshot) | Nimra | 2026-10-01 | ☑ (`big_blob.bin` 5120 KB refused; detect-secrets refused fake keys — logs + PNG screenshots in `docs/evidence/`) |
 | 4 | CSV is not in Git history, only its `.dvc` pointer | Esha | 2026-10-03 | ☑ (`git log --all` and `rev-list --objects --all` both empty; `docs/evidence/04-dvc-no-csv-history.png`) |
-| 5 | PR diff shows no cell outputs or execution counts | Nimra | — | ☐ (PR #5 open; author-side check already `0 0`) |
+| 5 | PR diff shows no cell outputs or execution counts | Nimra | 2026-10-03 | ☑ (Nimra approved PR #5; squash `fb2b61e` — notebook merged with `outputs=0`/`execution_count=0`) |
 | 6 | Teammate on a fresh clone: `dvc pull && dvc repro` gives identical metrics | — | — | ☐ |
 | 7 | Every member is both author and reviewer; ≥1 "changes requested" review | — | — | ☐ |
 | 8 | A deliberately broken test causes a red check that blocks merging | — | — | ☐ |
@@ -144,8 +185,8 @@ Requirement: **2 authored + 2 reviewed per member**, at least one review with
 | 2 | chore: add pre-commit hooks for lint, notebooks, large files and secrets | Nimra | Esha (approved) | dev | merged (squash `d32ed2f`) — [PR #2](https://github.com/eshamaryam1/cooked-ml-collab/pull/2) | `docs/evidence/03-precommit-*.txt` |
 | 3 | chore: add pre-commit hooks for lint, notebooks, large files and secrets | Nimra | Esha (approved) | dev | merged (squash `58264aa`) — [PR #3](https://github.com/eshamaryam1/cooked-ml-collab/pull/3) | `docs/evidence/03-precommit-*.txt` (screenshots PR) |
 | 4 | data: track california housing csv with dvc | Nimra | Esha (approved, fresh-clone verified) | dev | merged (squash `b6a2302`) — [PR #4](https://github.com/eshamaryam1/cooked-ml-collab/pull/4) | fresh-clone comment + `docs/evidence/04-dvc-no-csv-history.png` |
-| 5 | feat: add stripped eda notebook paired with jupytext script | Esha | Nimra (review requested) | dev | open — [PR #5](https://github.com/eshamaryam1/cooked-ml-collab/pull/5) | `notebooks/01-eda.ipynb` + `.py`, outputs/execution counts check `0 0` |
-| 6 | | | | | | |
+| 5 | feat: add stripped eda notebook paired with jupytext script | Esha | Nimra (approved) | dev | merged (squash `fb2b61e`) — [PR #5](https://github.com/eshamaryam1/cooked-ml-collab/pull/5) | `notebooks/01-eda.ipynb` + `.py`, outputs/execution counts check `0 0` |
+| 6 | feat: add seeded dvc pipeline producing reproducible metrics | Esha | Nimra (review requested) | dev | open — [PR #6](https://github.com/eshamaryam1/cooked-ml-collab/pull/6) | byte-identical `metrics.json` (`4C95763D…`), leakage test, deviations listed in the body |
 | 7 | | | | | | |
 | 8 | | | | | | |
 
