@@ -148,9 +148,14 @@ Update the tables as you go — this file is the running log the two of us read 
   - [x] `uv run pytest tests/ -q` → 41 passed; `ruff check .` + `ruff format --check .` clean;
     `uv run pre-commit run --all-files` green (detect-secrets now excludes the generated
     `metrics.json`, whose hex strings are content hashes)
-  - [ ] Nimra on a fresh clone: `dvc pull && dvc repro` → identical `metrics.json`, pasted in
-    the PR — **this is the graded checkpoint**
-  - [ ] PR `feat/dvc-pipeline → dev` reviewed, squash-merged; branch deleted
+  - [ ] Nimra on a fresh clone: `dvc pull && dvc repro --force` → identical `metrics.json`,
+    pasted in the PR — **this is the graded checkpoint** (Esha's run at `b3bf3bc`:
+    `4C95763D…CDDE9DAC`)
+  - [x] PR `feat/dvc-pipeline → dev` opened with the checkpoint evidence and the deviations
+    listed — [PR #6](https://github.com/eshamaryam1/cooked-ml-collab/pull/6), review requested
+    from Nimra
+  - [ ] Nimra reviews (checks out the branch, runs `dvc repro`, confirms the fresh-clone match),
+    squash merge; branch deleted
 - [ ] **M07 — Experiments & PRs** (both) — started: — · done: —
 - [ ] **M08 — CI** (Nimra) — started: — · done: —
 - [ ] **M09 — Release & report** (both) — started: — · done: —
@@ -181,7 +186,7 @@ Requirement: **2 authored + 2 reviewed per member**, at least one review with
 | 3 | chore: add pre-commit hooks for lint, notebooks, large files and secrets | Nimra | Esha (approved) | dev | merged (squash `58264aa`) — [PR #3](https://github.com/eshamaryam1/cooked-ml-collab/pull/3) | `docs/evidence/03-precommit-*.txt` (screenshots PR) |
 | 4 | data: track california housing csv with dvc | Nimra | Esha (approved, fresh-clone verified) | dev | merged (squash `b6a2302`) — [PR #4](https://github.com/eshamaryam1/cooked-ml-collab/pull/4) | fresh-clone comment + `docs/evidence/04-dvc-no-csv-history.png` |
 | 5 | feat: add stripped eda notebook paired with jupytext script | Esha | Nimra (approved) | dev | merged (squash `fb2b61e`) — [PR #5](https://github.com/eshamaryam1/cooked-ml-collab/pull/5) | `notebooks/01-eda.ipynb` + `.py`, outputs/execution counts check `0 0` |
-| 6 | | | | | | |
+| 6 | feat: add seeded dvc pipeline producing reproducible metrics | Esha | Nimra (review requested) | dev | open — [PR #6](https://github.com/eshamaryam1/cooked-ml-collab/pull/6) | byte-identical `metrics.json` (`4C95763D…`), leakage test, deviations listed in the body |
 | 7 | | | | | | |
 | 8 | | | | | | |
 
