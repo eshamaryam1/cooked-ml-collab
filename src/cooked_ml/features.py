@@ -11,6 +11,7 @@ from __future__ import annotations
 from collections.abc import Sequence
 from typing import Any
 
+import pandas as pd
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
@@ -40,3 +41,12 @@ def make_preprocessor(params: dict[str, Any]) -> Pipeline:
 def feature_columns(columns: Sequence[str], target: str) -> list[str]:
     """Drop the target from a column list, keeping the original order."""
     return [column for column in columns if column != target]
+
+
+def drop_duplicate_rows(df: pd.DataFrame, subset: list[str] | None = None) -> pd.DataFrame:
+    """Return a copy of ``df`` with exact duplicate rows removed.
+
+    The input frame is never modified, so the notebook and the pipeline stage
+    that share this helper keep seeing the data they loaded.
+    """
+    return df.drop_duplicates(subset=subset).reset_index(drop=True)
