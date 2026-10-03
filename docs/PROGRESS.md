@@ -191,7 +191,7 @@ Requirement: **2 authored + 2 reviewed per member**, at least one review with
 | 4 | data: track california housing csv with dvc | Nimra | Esha (approved, fresh-clone verified) | dev | merged (squash `b6a2302`) — [PR #4](https://github.com/eshamaryam1/cooked-ml-collab/pull/4) | fresh-clone comment + `docs/evidence/04-dvc-no-csv-history.png` |
 | 5 | feat: add stripped eda notebook paired with jupytext script | Esha | Nimra (approved) | dev | merged (squash `fb2b61e`) — [PR #5](https://github.com/eshamaryam1/cooked-ml-collab/pull/5) | `notebooks/01-eda.ipynb` + `.py`, outputs/execution counts check `0 0` |
 | 6 | feat: add seeded dvc pipeline producing reproducible metrics | Esha | Nimra (approved) | dev | merged (squash `1622d4d`) — [PR #6](https://github.com/eshamaryam1/cooked-ml-collab/pull/6) | byte-identical `metrics.json` (`4C95763D…`) confirmed by Nimra on a fresh clone ([comment](https://github.com/eshamaryam1/cooked-ml-collab/pull/6#issuecomment-5970244357)), leakage test, deviations in the body |
-| 7 | | | | | | |
+| 7 | docs: record module 06 fresh-clone reproduction and close the module | Nimra | Esha (approved) | dev | merged (squash `6ffe5bb`) — [PR #7](https://github.com/eshamaryam1/cooked-ml-collab/pull/7) | Module 06 close-out: fresh-clone checkpoint recorded, `PROGRESS.md` M06 → done (5/9) |
 | 8 | | | | | | |
 
 Required PRs to link in `REPORT.md`:
