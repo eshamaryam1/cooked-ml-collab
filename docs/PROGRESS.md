@@ -110,8 +110,10 @@ Update the tables as you go — this file is the running log the two of us read 
   - [x] `uv run pytest tests/ -q` → 35 passed; `ruff check .` and `ruff format --check .` clean
     (ruff `per-file-ignores` for `notebooks/*.py`: `B018` bare cell expressions, `RUF003`
     notebook prose)
-  - [ ] PR `feat/eda-notebook → dev` reviewed by Nimra (restart kernel, run all, confirm no
-    outputs in the diff), squash-merged; branch deleted
+  - [x] PR `feat/eda-notebook → dev` opened — [PR #5](https://github.com/eshamaryam1/cooked-ml-collab/pull/5),
+    `0 0` outputs check pasted in the body
+  - [ ] Nimra reviews (restart kernel, run all cells, confirm no outputs in the diff), squash
+    merge; branch deleted
 - [ ] **M06 — Reproducible pipeline** (Esha) — started: — · done: —
 - [ ] **M07 — Experiments & PRs** (both) — started: — · done: —
 - [ ] **M08 — CI** (Nimra) — started: — · done: —
@@ -125,7 +127,7 @@ Update the tables as you go — this file is the running log the two of us read 
 | 2 | 3 protected branches exist; `git log` on `main` shows the initial import | Esha | 2026-10-01 | ☑ (import on `main`; rules on `main`/`staging`/`dev`, direct push to `dev` rejected GH006) |
 | 3 | 5 MB file and a fake API key are both blocked (screenshot) | Nimra | 2026-10-01 | ☑ (`big_blob.bin` 5120 KB refused; detect-secrets refused fake keys — logs + PNG screenshots in `docs/evidence/`) |
 | 4 | CSV is not in Git history, only its `.dvc` pointer | Esha | 2026-10-03 | ☑ (`git log --all` and `rev-list --objects --all` both empty; `docs/evidence/04-dvc-no-csv-history.png`) |
-| 5 | PR diff shows no cell outputs or execution counts | — | — | ☐ |
+| 5 | PR diff shows no cell outputs or execution counts | Nimra | — | ☐ (PR #5 open; author-side check already `0 0`) |
 | 6 | Teammate on a fresh clone: `dvc pull && dvc repro` gives identical metrics | — | — | ☐ |
 | 7 | Every member is both author and reviewer; ≥1 "changes requested" review | — | — | ☐ |
 | 8 | A deliberately broken test causes a red check that blocks merging | — | — | ☐ |
@@ -142,7 +144,7 @@ Requirement: **2 authored + 2 reviewed per member**, at least one review with
 | 2 | chore: add pre-commit hooks for lint, notebooks, large files and secrets | Nimra | Esha (approved) | dev | merged (squash `d32ed2f`) — [PR #2](https://github.com/eshamaryam1/cooked-ml-collab/pull/2) | `docs/evidence/03-precommit-*.txt` |
 | 3 | chore: add pre-commit hooks for lint, notebooks, large files and secrets | Nimra | Esha (approved) | dev | merged (squash `58264aa`) — [PR #3](https://github.com/eshamaryam1/cooked-ml-collab/pull/3) | `docs/evidence/03-precommit-*.txt` (screenshots PR) |
 | 4 | data: track california housing csv with dvc | Nimra | Esha (approved, fresh-clone verified) | dev | merged (squash `b6a2302`) — [PR #4](https://github.com/eshamaryam1/cooked-ml-collab/pull/4) | fresh-clone comment + `docs/evidence/04-dvc-no-csv-history.png` |
-| 5 | | | | | | |
+| 5 | feat: add stripped eda notebook paired with jupytext script | Esha | Nimra (review requested) | dev | open — [PR #5](https://github.com/eshamaryam1/cooked-ml-collab/pull/5) | `notebooks/01-eda.ipynb` + `.py`, outputs/execution counts check `0 0` |
 | 6 | | | | | | |
 | 7 | | | | | | |
 | 8 | | | | | | |
