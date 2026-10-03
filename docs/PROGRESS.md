@@ -3,7 +3,7 @@
 Tick a box only when the checkpoint in that module is actually demonstrated in the repo.
 Update the tables as you go — this file is the running log the two of us read before every PR.
 
-**Overall status: 1 / 9 modules complete**
+**Overall status: 3 / 9 modules complete**
 
 ---
 
@@ -44,9 +44,10 @@ Update the tables as you go — this file is the running log the two of us read 
     into an org. Status checks to be added in Module 08.
   - [ ] Default branch switched from `chore/check-push-esha` to `main` — repo admin, Settings →
     General (not part of Module 02, but flagged while doing step 7)
-- [ ] **M03 — pre-commit & secrets** (Nimra) — started: 2026-10-01 · done: —
+- [x] **M03 — pre-commit & secrets** (Nimra) — started: 2026-10-01 · done: 2026-10-03
   - [x] Branch `feat/pre-commit` from `dev`; `uv add --dev pre-commit detect-secrets` +
-    `uv run pre-commit install` (Esha runs the install in her clone too — pending)
+    `uv run pre-commit install` (Esha's clone installed too — 2026-10-03,
+    `pre-commit installed at .git\hooks\pre-commit`)
   - [x] `.pre-commit-config.yaml` — large files (1 MB cap), merge conflicts, YAML, EOF, trailing
     whitespace, LF line endings, `ruff` + `ruff-format`, `nbstripout`, `detect-secrets`.
     Deviations from the module doc: ruff hook pinned `v0.16.9` to match local ruff 0.16.9
@@ -64,10 +65,13 @@ Update the tables as you go — this file is the running log the two of us read 
   - [x] Fake API key blocked by detect-secrets (high entropy + keyword + AWS key) — log
     `docs/evidence/03-precommit-secret.txt`
   - [x] PNG screenshots under `docs/evidence/`
-  - [ ] PR `feat/pre-commit → dev` reviewed by Esha and merged (squash); branch deleted
-- [ ] **M04 — DVC data versioning** (Nimra) — started: 2026-10-01 · done: —
+  - [x] PR `feat/pre-commit → dev` reviewed by Esha and merged (squash); branch deleted —
+    [PR #2](https://github.com/eshamaryam1/cooked-ml-collab/pull/2) → squash `d32ed2f`,
+    [PR #3](https://github.com/eshamaryam1/cooked-ml-collab/pull/3) → squash `58264aa`
+    (both approved by Esha; `feat/pre-commit` gone from origin)
+- [x] **M04 — DVC data versioning** (Nimra) — started: 2026-10-01 · done: 2026-10-03
   - [x] CSV hash checked: `git hash-object` = `8edefff052981e57ff00439301b7776d3ff93998`
-    (Esha's must match — pending confirmation)
+    — confirmed on Esha's fresh clone 2026-10-03: identical
   - [x] Branch `data/initial-dataset`; `uv add "dvc[s3]"` + `uv run dvc init`
   - [x] `data/raw/california_housing.csv.dvc` committed; the CSV is git-ignored by DVC's own
     `data/raw/.gitignore`, `git ls-files` shows only `tests/fixtures/sample.csv`
@@ -82,9 +86,32 @@ Update the tables as you go — this file is the running log the two of us read 
   - [x] `dvc push` → "1 file pushed"; `dvc status -c` → "Cache and remote 'storage' are in sync"
   - [x] `git log --all -- <csv>` and `git rev-list --objects --all` both empty — screenshot for
     `REPORT.md`
-  - [ ] Esha fresh-clone `dvc pull` + `(20640, 9)` check pasted in the PR
-  - [ ] PR `data/initial-dataset → dev` reviewed, squash-merged; branch deleted
-- [ ] **M05 — Notebooks** (Esha) — started: — · done: —
+  - [x] Esha fresh-clone `dvc pull` + `(20640, 9)` check pasted in the PR — 2026-10-03,
+    [PR #4 comment](https://github.com/eshamaryam1/cooked-ml-collab/pull/4#issuecomment-5967319500)
+    (`dvc status -c` in sync, hash `8edefff…998` reproduced in the fresh clone)
+  - [x] PR `data/initial-dataset → dev` reviewed, squash-merged; branch deleted —
+    [PR #4](https://github.com/eshamaryam1/cooked-ml-collab/pull/4) → squash `b6a2302`,
+    approved by Esha; branch gone from origin
+- [ ] **M05 — Notebooks** (Esha) — started: 2026-10-03 · done: —
+  - [x] Branch `feat/eda-notebook` from `dev`
+  - [x] `notebooks/01-eda.ipynb` runs top to bottom from a fresh kernel — executed twice with
+    `uv run jupyter nbconvert --to notebook --execute --inplace`; covers setup, shape/dtypes/head,
+    missing values, `describe()`, target + feature histograms, correlations, `MedInc` and
+    lat/lon charts, and a markdown Observations cell written from the real output
+  - [x] No hardcoded paths: repo root resolved by walking up to `params.yaml`; seed 42 and
+    `data/raw_path` read from `params.yaml`, not pasted into cells
+  - [x] Paired with `notebooks/01-eda.py` (`jupytext --set-formats ipynb,py:percent`);
+    `jupytext --sync` reports both files unchanged; the twin runs with plain
+    `python notebooks/01-eda.py` (no `%matplotlib inline` magic)
+  - [x] `drop_duplicate_rows` promoted to `src/cooked_ml/features.py` with 4 tests in
+    `tests/test_features.py`; the notebook imports it instead of inlining the logic
+  - [x] `nbstripout` hook strips outputs on commit — `outputs=0, execution_count=0` verified
+    with `pre-commit run nbstripout --files notebooks/01-eda.ipynb`
+  - [x] `uv run pytest tests/ -q` → 35 passed; `ruff check .` and `ruff format --check .` clean
+    (ruff `per-file-ignores` for `notebooks/*.py`: `B018` bare cell expressions, `RUF003`
+    notebook prose)
+  - [ ] PR `feat/eda-notebook → dev` reviewed by Nimra (restart kernel, run all, confirm no
+    outputs in the diff), squash-merged; branch deleted
 - [ ] **M06 — Reproducible pipeline** (Esha) — started: — · done: —
 - [ ] **M07 — Experiments & PRs** (both) — started: — · done: —
 - [ ] **M08 — CI** (Nimra) — started: — · done: —
@@ -97,7 +124,7 @@ Update the tables as you go — this file is the running log the two of us read 
 | 1 | All members can push a branch | — | 2026-09-30 | ☑ (`87d044c` Esha, `880bed7` Nimra) |
 | 2 | 3 protected branches exist; `git log` on `main` shows the initial import | Esha | 2026-10-01 | ☑ (import on `main`; rules on `main`/`staging`/`dev`, direct push to `dev` rejected GH006) |
 | 3 | 5 MB file and a fake API key are both blocked (screenshot) | Nimra | 2026-10-01 | ☑ (`big_blob.bin` 5120 KB refused; detect-secrets refused fake keys — logs + PNG screenshots in `docs/evidence/`) |
-| 4 | CSV is not in Git history, only its `.dvc` pointer | — | — | ☐ |
+| 4 | CSV is not in Git history, only its `.dvc` pointer | Esha | 2026-10-03 | ☑ (`git log --all` and `rev-list --objects --all` both empty; `docs/evidence/04-dvc-no-csv-history.png`) |
 | 5 | PR diff shows no cell outputs or execution counts | — | — | ☐ |
 | 6 | Teammate on a fresh clone: `dvc pull && dvc repro` gives identical metrics | — | — | ☐ |
 | 7 | Every member is both author and reviewer; ≥1 "changes requested" review | — | — | ☐ |
@@ -112,9 +139,9 @@ Requirement: **2 authored + 2 reviewed per member**, at least one review with
 | # | Title | Author | Reviewer | Target | Outcome | Evidence note |
 |---|---|---|---|---|---|---|
 | 1 | docs: record branch protection and close module 02 | Esha | Nimra (approved) | dev | merged (squash `b117ca1`) | Module 02 close-out, `PROGRESS.md` + `MODULE_02_scaffold.md` |
-| 2 | chore: add pre-commit hooks for lint, notebooks, large files and secrets | Nimra | Esha (requested) | dev | open — [PR #2](https://github.com/eshamaryam1/cooked-ml-collab/pull/2) | `docs/evidence/03-precommit-*.txt` |
-| 3 | | | | | | |
-| 4 | | | | | | |
+| 2 | chore: add pre-commit hooks for lint, notebooks, large files and secrets | Nimra | Esha (approved) | dev | merged (squash `d32ed2f`) — [PR #2](https://github.com/eshamaryam1/cooked-ml-collab/pull/2) | `docs/evidence/03-precommit-*.txt` |
+| 3 | chore: add pre-commit hooks for lint, notebooks, large files and secrets | Nimra | Esha (approved) | dev | merged (squash `58264aa`) — [PR #3](https://github.com/eshamaryam1/cooked-ml-collab/pull/3) | `docs/evidence/03-precommit-*.txt` (screenshots PR) |
+| 4 | data: track california housing csv with dvc | Nimra | Esha (approved, fresh-clone verified) | dev | merged (squash `b6a2302`) — [PR #4](https://github.com/eshamaryam1/cooked-ml-collab/pull/4) | fresh-clone comment + `docs/evidence/04-dvc-no-csv-history.png` |
 | 5 | | | | | | |
 | 6 | | | | | | |
 | 7 | | | | | | |
@@ -152,7 +179,8 @@ Winner promoted via `dvc exp apply`: ______ (PR link: ______)
 
 - [x] Pre-commit blocking a 5 MB file (`docs/evidence/03-precommit-large-file.png`)
 - [x] Pre-commit / secret scanner blocking a fake API key (`docs/evidence/03-precommit-secret.png`)
-- [ ] `git log --all -- data/raw/california_housing.csv` empty — no data in Git history (M04)
+- [x] `git log --all -- data/raw/california_housing.csv` empty — no data in Git history (M04) —
+  `docs/evidence/04-dvc-no-csv-history.png`
 - [ ] A failing CI check (red) that blocks the merge
 - [ ] A passing CI check (green)
 
