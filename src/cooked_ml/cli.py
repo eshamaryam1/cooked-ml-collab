@@ -275,7 +275,10 @@ def cmd_evaluate(args: argparse.Namespace) -> int:
 
     metrics_file = artifact_path(params, "metrics_path")
     metrics_file.parent.mkdir(parents=True, exist_ok=True)
-    metrics_file.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    # newline="\n": Windows text mode would emit CRLF, and the pre-commit
+    # line-ending hook rewrites it to LF afterwards — which would change the
+    # md5 DVC recorded for this file and leave `dvc status` permanently dirty.
+    metrics_file.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8", newline="\n")
 
     print(json.dumps(payload, indent=2))
     return 0
