@@ -24,6 +24,8 @@ dev = [
     "detect-secrets>=1.5.0",
     "ipykernel>=7.4.0",
     "jupytext>=1.19.5",
+    "matplotlib>=3.11.2",
+    "nbconvert>=7.17.1",
     "pre-commit>=4.6.2",
     "pytest>=9.1.1",
     "ruff>=0.16.9",
@@ -36,6 +38,11 @@ src = ["src", "tests"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+# jupytext twins of the notebooks: bare expressions are how a cell displays a value,
+# and notebook prose may use unicode punctuation.
+"notebooks/*.py" = ["B018", "RUF003"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
