@@ -5,8 +5,8 @@ stages:
     deps:
     - path: data/raw/california_housing.csv
       hash: md5
-      md5: b2a3a690f28c00947f021c0c721492f3
-      size: 1426282
+      md5: 8a862f33970de79c84a533bf841050cc
+      size: 1426634
     - path: params.yaml
       hash: md5
       md5: d3e96957a6e240f75632d33bd71d4575
@@ -61,12 +61,12 @@ stages:
       size: 1811
     - path: src/cooked_ml/models.py
       hash: md5
-      md5: 5020efcd2aae2db599b5edd06dd5f9c1
-      size: 1575
+      md5: cf49b73dbb7c21a8c0b9f0a67fbb5df4
+      size: 2495
     outs:
     - path: models/model.joblib
       hash: md5
-      md5: d81199a1d1582beb2d2ff8b281673d26
+      md5: 0309880cddbdff5fc3f80178989c9a4d
       size: 24545427
   evaluate:
     cmd: uv run python -m cooked_ml.cli evaluate
@@ -77,7 +77,7 @@ stages:
       size: 284918
     - path: models/model.joblib
       hash: md5
-      md5: d81199a1d1582beb2d2ff8b281673d26
+      md5: 0309880cddbdff5fc3f80178989c9a4d
       size: 24545427
     - path: params.yaml
       hash: md5
@@ -98,5 +98,5 @@ stages:
     outs:
     - path: metrics.json
       hash: md5
-      md5: 731a60cf7f54fbeb8ed04052d7f33d91
+      md5: f8bdf0a2bb43c227336e4d31d5275d96
       size: 592
