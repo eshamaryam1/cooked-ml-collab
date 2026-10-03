@@ -57,6 +57,36 @@ def test_build_model_passes_hyperparameters() -> None:
     assert forest.n_estimators == 7
 
 
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("random_forest", RandomForestRegressor),
+        ("linear_regression", LinearRegression),
+        ("gradient_boosting", GradientBoostingRegressor),
+    ],
+)
+def test_build_model_accepts_the_shared_params_block(name: str, expected: type) -> None:
+    """Experiments flip ``model.name`` and keep ``model.params`` as it is.
+
+    The block is shared by every family, so the keys another estimator owns are
+    dropped instead of reaching ``__init__`` as unexpected keyword arguments.
+    """
+    block = dict(load_params()["model"]["params"])
+    model = build_model({"name": name, "params": block}, seed=SEED)
+
+    assert isinstance(model, expected)
+    if name == "random_forest":
+        assert model.n_jobs == block["n_jobs"]
+    if name == "gradient_boosting":
+        assert model.n_estimators == block["n_estimators"]
+        assert model.max_depth == block["max_depth"]
+
+
+def test_build_model_rejects_a_param_no_family_owns() -> None:
+    with pytest.raises(ValueError, match="unknown model param"):
+        build_model({"name": "random_forest", "params": {"max_depthh": 4}}, seed=SEED)
+
+
 def test_build_model_is_reproducible(frame: pd.DataFrame) -> None:
     features = feature_columns(frame.columns, "MedHouseVal")
     first = build_model({"name": "random_forest", "params": {"n_estimators": 5}}, seed=SEED)
