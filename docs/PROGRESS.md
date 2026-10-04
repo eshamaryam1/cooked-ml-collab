@@ -212,13 +212,17 @@ Requirement: **3 experiments per member** (`dvc exp run`), compared with `dvc ex
 | exp-esha-d10 | Esha | `exp/esha-max-depth` | `model.params.max_depth: 12 → 10` | 0.77423 | 0.36595 | Shallower forest loses to base — real result, kept in the table |
 | exp-esha-d4 | Esha | `exp/esha-max-depth` | `model.params.max_depth: 12 → 4` | 0.59796 | 0.53151 | Depth collapse; honest negative result |
 | exp-esha-gbr | Esha | `exp/esha-max-depth` | `model.name: random_forest → gradient_boosting` | 0.81331 | 0.31727 | Best of the four rows so far; needs [PR #8](https://github.com/eshamaryam1/cooked-ml-collab/pull/8) to train at all |
-| exp004 | | | | | | |
-| exp005 | | | | | | |
-| exp006 | | | | | | |
+| exp-nimra-d8 | Nimra | `exp/nimra-d8` | `model.params.max_depth: 12 → 8` | 0.73921 | 0.40181 | Shallow forest loses to base, same shape as Esha's d10/d4 |
+| exp-nimra-n300 | Nimra | `exp/nimra-n300` | `model.params.n_estimators: 100 → 300` | 0.79408 | 0.34356 | More trees help a little, still behind gbr — best Nimra row |
+| exp-nimra-ldm | Nimra | `exp/nimra-ldm` | `model.name: random_forest → linear_regression` | 0.57579 | 0.53320 | Worst of the seven; branch kept unmerged as the abandoned-experiment evidence |
 
 All three Esha runs at base `216f492` (= `e06970d` of [PR #8](https://github.com/eshamaryam1/cooked-ml-collab/pull/8),
 cherry-picked onto the exp branch); `exp/esha-max-depth` is pushed as evidence and never merged.
-Nimra's three still to run.
+
+Nimra's three ran at base `6ffe5bb` / `74eb14e`, seed 42
+(`exp/nimra-d8`, `exp/nimra-n300`, `exp/nimra-ldm`). Seven-row order by r2:
+gbr **0.81331** > n300 0.79408 > base 0.79133 > d10 0.77423 > d8 0.73921 > d4 0.59796 >
+ldm 0.57579 — `exp-esha-gbr` still wins, so no re-promotion is needed.
 
 Winner promoted via `dvc exp apply`: `exp-esha-gbr` (gradient_boosting, r2 0.81331) —
 [PR #10](https://github.com/eshamaryam1/cooked-ml-collab/pull/10)
