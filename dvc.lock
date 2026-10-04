@@ -61,8 +61,8 @@ stages:
       size: 1811
     - path: src/cooked_ml/models.py
       hash: md5
-      md5: 9365cfc35deedc9109a54c3202286cf3
-      size: 2556
+      md5: cf49b73dbb7c21a8c0b9f0a67fbb5df4
+      size: 2495
     outs:
     - path: models/model.joblib
       hash: md5
