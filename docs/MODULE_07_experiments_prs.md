@@ -137,14 +137,18 @@ uv run dvc push
 git add data/raw/california_housing.csv.dvc dvc.lock params.yaml
 git commit -m "data: enable duplicate removal in preprocessing"
 
-git log --oneline -1 -- data/raw/california_housing.csv.dvc
-git checkout HEAD~1 -- data/raw/california_housing.csv.dvc
-uv run dvc checkout
-Get-FileHash data/raw/california_housing.csv -Algorithm MD5
+git log --oneline -2 -- data/raw/california_housing.csv.dvc
 
-git checkout dev -- data/raw/california_housing.csv.dvc
+# v1 — the old pointer. origin/dev still points at it: on PR #11's branch that commit is
+# HEAD~2, not HEAD~1, because the data change took two commits (.dvc bump, then lock re-record)
+git checkout origin/dev -- data/raw/california_housing.csv.dvc
 uv run dvc checkout
-Get-FileHash data/raw/california_housing.csv -Algorithm MD5
+Get-FileHash data/raw/california_housing.csv -Algorithm MD5   # old md5
+
+# v2 — the new pointer this branch introduces
+git checkout HEAD -- data/raw/california_housing.csv.dvc
+uv run dvc checkout
+Get-FileHash data/raw/california_housing.csv -Algorithm MD5   # new md5
 ```
 
 Two different MD5s = the old data version is recoverable. Screenshot both hashes for `REPORT.md`.
