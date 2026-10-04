@@ -35,7 +35,7 @@ Do these in order. Each one depends on the previous.
 | 4 | [Module 04 — Version the data with DVC](MODULE_04_dvc.md) | Nimra | Not started |
 | 5 | [Module 05 — Notebooks done right](MODULE_05_notebooks.md) | Esha | Not started |
 | 6 | [Module 06 — Reproducible DVC pipeline](MODULE_06_pipeline.md) | Esha | Complete |
-| 7 | [Module 07 — Experiments & pull requests](MODULE_07_experiments_prs.md) | both | Not started |
+| 7 | [Module 07 — Experiments & pull requests](MODULE_07_experiments_prs.md) | both | In progress |
 | 8 | [Module 08 — CI on every pull request](MODULE_08_ci.md) | Nimra | Not started |
 | 9 | [Module 09 — Release: dev → staging → main](MODULE_09_release.md) | both | Not started |
 
