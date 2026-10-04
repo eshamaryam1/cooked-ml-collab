@@ -243,14 +243,18 @@ Fill in the PR log, experiment table and abandoned-branch box in
 - [x] Winner applied with `dvc exp apply` and promoted via `feat/` PR with before/after metrics
 - [x] `≥2` merged PRs authored per member and `≥2` reviewed per member
 - [x] At least one "Changes requested" review — Esha on [PR #11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11)
-  (2026-10-04); still needs linking in `REPORT.md` (Module 09)
+  (2026-10-04); both items were fixed by Nimra in
+  [PR #15](https://github.com/eshamaryam1/cooked-ml-collab/pull/15) and verified by Esha on #11 —
+  still needs linking in `REPORT.md` (Module 09)
 - [x] Data-update PR showing old and new data versions via `dvc checkout` —
   [PR #11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11) (open; v1 `b2a3a690…` vs v2
-  `8a862f33…` both reproduced in the body)
-- [ ] Conflict-resolution PR documented — Esha's half merged as
-  [PR #14](https://github.com/eshamaryam1/cooked-ml-collab/pull/14); Nimra's
-  [PR #13](https://github.com/eshamaryam1/cooked-ml-collab/pull/13) is parked until she rebases
-  onto `dev`, resolves `params.yaml` keeping both intents, and documents it in the PR body
+  `8a862f33…` both reproduced in the body; branch now conflicts with `dev` after #14 — one
+  `dvc.lock` / `metrics.json` rebase left before merge)
+- [ ] Conflict-resolution PR documented — the conflict is **already resolved and documented** in
+  [PR #13](https://github.com/eshamaryam1/cooked-ml-collab/pull/13): rebased onto
+  [PR #14](https://github.com/eshamaryam1/cooked-ml-collab/pull/14)'s `4906d30`, `params.yaml`
+  conflict output pasted in the body, both intents kept (`max_depth: 8` + `n_estimators: 200`),
+  r2 0.84156. Blocked only on Esha's approval — **tick when it merges**
 - [x] One unmerged `exp/` branch with a written explanation
 - [x] Every PR used the checklist template
 
