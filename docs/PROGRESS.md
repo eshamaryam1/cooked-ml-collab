@@ -194,7 +194,7 @@ Requirement: **2 authored + 2 reviewed per member**, at least one review with
 | 7 | docs: record module 06 fresh-clone reproduction and close the module | Nimra | Esha (approved) | dev | merged (squash `6ffe5bb`) — [PR #7](https://github.com/eshamaryam1/cooked-ml-collab/pull/7) | Module 06 close-out: fresh-clone checkpoint recorded, `PROGRESS.md` M06 → done (5/9) |
 | 8 | fix: ignore model params the selected estimator does not accept | Esha | Nimra (approved) | dev | merged (squash `74eb14e`) — [PR #8](https://github.com/eshamaryam1/cooked-ml-collab/pull/8) | checked out and ran: 45 tests, `ruff` clean, all three model families build from the shared `model.params` block, typo key still rejected |
 | 9 | docs: mark module 06 complete in the status table | Nimra | Esha (approved) | dev | merged (squash `9801ce0`) — [PR #9](https://github.com/eshamaryam1/cooked-ml-collab/pull/9) | `docs/README.md` Module 06 → Complete; PR-log row 7 |
-| 10 | feat: promote gradient boosting with r2 0.81331 from exp-esha-gbr | Esha | Nimra (approved) | dev | open — [PR #10](https://github.com/eshamaryam1/cooked-ml-collab/pull/10) | checkout ran clean (45 tests, provenance `c2ba5a5` = `gradient_boosting`); review comment carries Nimra's three experiment rows and the CRLF `dvc.lock` finding |
+| 10 | feat: promote gradient boosting with r2 0.81331 from exp-esha-gbr | Esha | Nimra (approved) | dev | merged (squash `054f9a6`) — [PR #10](https://github.com/eshamaryam1/cooked-ml-collab/pull/10) | reopened, retargeted to `dev` and rebased (duplicated `#8` fix dropped), CRLF `dvc.lock` entry re-recorded as `cf49b73d…`, Nimra's three rows added; provenance `ca24fb7` = `gradient_boosting`, 45 tests + `ruff` clean |
 | 11 | data: re-export raw csv with 5 duplicate rows so dedupe has a real effect | Nimra | Esha (review requested) | dev | open — [PR #11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11) | data v1 → v2 (`b2a3a690…` → `8a862f33…`), 20,640 → 20,645 rows, metrics unchanged |
 
 Required PRs to link in `REPORT.md`:
@@ -234,9 +234,11 @@ Winner promoted via `dvc exp apply`: `exp-esha-gbr` (gradient_boosting, r2 0.813
 
 - [ ] At least one `exp/` branch kept unmerged and explained in `REPORT.md` (branch: `exp/nimra-ldm`)
   - Pushed to origin as evidence and **never merged**: linear regression on the same split scores
-    r2 **0.57579** / mae **0.53320** against the shipped forest's 0.79133 / 0.34542 — an honest
-    negative result. Promoting it would have cost ~0.22 r2, which is why it stays abandoned. The
-    written explanation lands in `REPORT.md` when Module 09 opens it (box stays unticked until then).
+    r2 **0.57579** / mae **0.53320** against the shipped model's 0.81331 / 0.31727
+    (`exp-esha-gbr`, [PR #10](https://github.com/eshamaryam1/cooked-ml-collab/pull/10)) — an
+    honest negative result. Promoting it would have cost ~0.24 r2, which is why it stays
+    abandoned. The written explanation lands in `REPORT.md` when Module 09 opens it (box stays
+    unticked until then).
 
 ## Screenshots needed for `REPORT.md`
 
