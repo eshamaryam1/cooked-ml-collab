@@ -36,7 +36,7 @@ Do these in order. Each one depends on the previous.
 | 5 | [Module 05 — Notebooks done right](MODULE_05_notebooks.md) | Esha | Complete |
 | 6 | [Module 06 — Reproducible DVC pipeline](MODULE_06_pipeline.md) | Esha | Complete |
 | 7 | [Module 07 — Experiments & pull requests](MODULE_07_experiments_prs.md) | both | Complete |
-| 8 | [Module 08 — CI on every pull request](MODULE_08_ci.md) | Nimra | Not started |
+| 8 | [Module 08 — CI on every pull request](MODULE_08_ci.md) | Esha (took over from Nimra) | Complete |
 | 9 | [Module 09 — Release: dev → staging → main](MODULE_09_release.md) | both | Not started |
 
 Progress is tracked in [PROGRESS.md](PROGRESS.md). Shared rules live in

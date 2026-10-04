@@ -3,7 +3,7 @@
 Tick a box only when the checkpoint in that module is actually demonstrated in the repo.
 Update the tables as you go — this file is the running log the two of us read before every PR.
 
-**Overall status: 6 / 9 modules complete**
+**Overall status: 7 / 9 modules complete**
 
 ---
 
@@ -163,7 +163,34 @@ Update the tables as you go — this file is the running log the two of us read 
     reproduction matched), approved; squash merge — [PR #6](https://github.com/eshamaryam1/cooked-ml-collab/pull/6)
     → squash `1622d4d`, branch `feat/dvc-pipeline` deleted from origin
 - [x] **M07 — Experiments & PRs** (both) — started: 2026-10-03 · done: 2026-10-04
-- [ ] **M08 — CI** (Nimra) — started: — · done: —
+- [x] **M08 — CI** (Esha — took over from Nimra, who was unavailable) — started: 2026-10-04 ·
+  done: 2026-10-04
+  - [x] `.github/workflows/ci.yml` — four jobs (`lint`, `test`, `data-check`, `smoke-train`) plus
+    a `report` job, on `pull_request` **and** `push` into `dev`/`staging`/`main`, with
+    `concurrency` cancellation
+  - [x] Committed 200-row real sample `tests/fixtures/ci_sample.csv` (first 200 rows of the
+    shipped CSV, byte-identical row text, LF) so `data-check` and `smoke-train` run **without
+    DagsHub credentials or `dvc pull`**. Deviation: the module doc names
+    `tests/fixtures/sample.csv`, but that file has been the *synthetic* M02 fixture since
+    `ad7533f` (`corr(target, MedInc)` 0.978 vs 0.688 real, 0/200 rows in the shipped CSV) and
+    `test_pipeline_learns_the_synthetic_signal` needs it — overwriting it turned that test red
+    (r² 0.778 < 0.9), so the real sample lives in a sibling file
+  - [x] `scripts/check_data.py` — schema → null → finite → range checks; four bounds widened past
+    the doc's example table after measuring the shipped CSV (`AveRooms` 141.9, `AveBedrms` 34.07,
+    `Population` 35682, `AveOccup` 1243), as the doc's gotcha instructs
+  - [x] `configs/smoke.yaml` → `raw_path: tests/fixtures/ci_sample.csv`; smoke train runs
+    `prepare → train → evaluate` (no `repro` subcommand in this CLI, `data.max_rows` already
+    covers `smoke_rows`) — **11.4 s** locally, r² 0.8212 / MAE 0.2716
+  - [x] All four checks green on the PR run — **62 s wall clock** (limit ~5 min);
+    `docs/evidence/08-ci-passing.txt`
+  - [x] `lint`, `test`, `data-check`, `smoke-train` registered as **required status checks on
+    `dev`, `staging` and `main`** (`strict: false`, 1 approval, `enforce_admins` on,
+    conversation resolution on) — set via the branch-protection API, 2026-10-04
+  - [x] Checkpoint 8 demonstrated on [PR #20](https://github.com/eshamaryam1/cooked-ml-collab/pull/20)
+    — see the table below; `docs/evidence/08-ci-failing.txt`
+  - [x] Deviations recorded in [PR #19](https://github.com/eshamaryam1/cooked-ml-collab/pull/19)'s
+    body; CML bonus (+5) **not attempted** — the module doc itself says the +5 is not worth a red
+    pipeline, and it needs a token this PR cannot safely add
 - [ ] **M09 — Release & report** (both) — started: — · done: —
 
 ## Assignment checkpoints
@@ -177,7 +204,7 @@ Update the tables as you go — this file is the running log the two of us read 
 | 5 | PR diff shows no cell outputs or execution counts | Nimra | 2026-10-03 | ☑ (Nimra approved PR #5; squash `fb2b61e` — notebook merged with `outputs=0`/`execution_count=0`) |
 | 6 | Teammate on a fresh clone: `dvc pull && dvc repro` gives identical metrics | Nimra | 2026-10-03 | ☑ (fresh clone at `b3bf3bc`; SHA256 `4C95763D…CDDE9DAC` identical to Esha's, pasted in [PR #6 comment](https://github.com/eshamaryam1/cooked-ml-collab/pull/6#issuecomment-5970244357)) |
 | 7 | Every member is both author and reviewer; ≥1 "changes requested" review | both | 2026-10-04 | ☑ (authored merged: Esha #1/#5/#6/#8/#10/#14/#17, Nimra #2/#3/#4/#7/#9/#12/#13/#15/#16; each has reviewed the other's PRs; "Changes requested" by Esha on [PR #11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11)) |
-| 8 | A deliberately broken test causes a red check that blocks merging | — | — | ☐ |
+| 8 | A deliberately broken test causes a red check that blocks merging | Esha | 2026-10-04 | ☑ ([PR #20](https://github.com/eshamaryam1/cooked-ml-collab/pull/20): `test` **FAILED** (13 s) while `lint`/`data-check`/`smoke-train` passed; `gh pr merge --squash` refused with *"the base branch policy prohibits the merge"*, `mergeState=BLOCKED`, and `--admin` is no way out because `enforce_admins` is on — full transcript in `docs/evidence/08-ci-failing.txt`) |
 | 9 | `model-v1.0` exists on `main` and the independent reproduction matched | — | — | ☐ |
 
 ## Pull request log
@@ -204,7 +231,9 @@ Requirement: **2 authored + 2 reviewed per member**, at least one review with
 | 15 | chore: force lf line endings with .gitattributes and fix the v1/v2 verify snippet | Nimra | Esha (approved) | dev | merged (squash `1893642`) — [PR #15](https://github.com/eshamaryam1/cooked-ml-collab/pull/15) | **the fix PR for both changes-requested items on [#11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11)**: `* text=auto eol=lf` + `git add --renormalize .` so `dvc status` stays clean under `core.autocrlf=true` (with the mandatory `git rm --cached -r . ; git reset --hard` refresh), and Step 4's v1 ref fixed `HEAD~1` → `origin/dev`/`HEAD~2`; Esha verified both end-to-end before merging |
 | 16 | docs: sync trackers with github (prs 12-15, checkpoint 7, module statuses) | Nimra | Esha (approved) | dev | merged (squash `1a5c189`) — [PR #16](https://github.com/eshamaryam1/cooked-ml-collab/pull/16) | tracker-only: PR-log rows 12–15, checkpoint 7 ☑ (both members author *and* reviewer, changes-requested present), `docs/README.md` M03/M04/M05 → Complete, M07 → In progress |
 | 17 | docs: log the #13 and #11 merges — conflict-resolution box, data v2 shipped, checkpoint 7 | Esha | Nimra (approved) | dev | merged (squash `40da38d`) — [PR #17](https://github.com/eshamaryam1/cooked-ml-collab/pull/17) | log-only: data-update ☑ and conflict-resolution ☑ boxes ticked with the real squash SHAs, rows 11/13 → merged, shipped-config paragraph updated to data v2 (`8a862f33…`) + r2 0.84156 / MAE 0.29484, checkpoint 7 author lists corrected |
-| 18 | docs: close module 07 — M07 done, status table → Complete (6/9) | Nimra | Esha (review requested) | dev | open — [PR #18](https://github.com/eshamaryam1/cooked-ml-collab/pull/18) | Module 07 close-out: `PROGRESS.md` M07 ☑ done 2026-10-04, overall 5/9 → 6/9, `docs/README.md` row 7 → Complete |
+| 18 | docs: close module 07 — M07 done, status table → Complete (6/9) | Nimra | Esha (approved) | dev | merged (squash `dfec747`) — [PR #18](https://github.com/eshamaryam1/cooked-ml-collab/pull/18) | Module 07 close-out: `PROGRESS.md` M07 ☑ done 2026-10-04, overall 5/9 → 6/9, `docs/README.md` row 7 → Complete |
+| 19 | ci: run lint, tests, data-check and smoke train on every pull request | Esha | Nimra (review requested) | dev | open — [PR #19](https://github.com/eshamaryam1/cooked-ml-collab/pull/19) | Module 08: `.github/workflows/ci.yml` (4 jobs + `report`, PRs into dev/staging/main), `scripts/check_data.py`, real 200-row `tests/fixtures/ci_sample.csv`, `configs/smoke.yaml` → credential-free smoke train (11.4 s local / 62 s in Actions); required status checks registered on all three branches; `docs/evidence/08-ci-passing.txt` |
+| 20 | test: demo red ci check (throwaway, will not be merged) | Esha | — | dev | closed without merge — [PR #20](https://github.com/eshamaryam1/cooked-ml-collab/pull/20) | **checkpoint 8 evidence**: `test` red, three jobs green, `gh pr merge` refused, `mergeState=BLOCKED`; branch `chore/demo-red-ci` deleted; `docs/evidence/08-ci-failing.txt` |
 
 Required PRs to link in `REPORT.md`:
 
@@ -276,16 +305,21 @@ historical runs, not the shipped configuration.
 - [x] Pre-commit / secret scanner blocking a fake API key (`docs/evidence/03-precommit-secret.png`)
 - [x] `git log --all -- data/raw/california_housing.csv` empty — no data in Git history (M04) —
   `docs/evidence/04-dvc-no-csv-history.png`
-- [ ] A failing CI check (red) that blocks the merge
-- [ ] A passing CI check (green)
+- [x] A failing CI check (red) that blocks the merge — [PR #20](https://github.com/eshamaryam1/cooked-ml-collab/pull/20)
+  (`test` FAILED, merge refused, `mergeState=BLOCKED`); transcript
+  `docs/evidence/08-ci-failing.txt`, GitHub page linked there for the screenshot
+- [x] A passing CI check (green) — all five jobs green in 62 s on
+  [PR #19](https://github.com/eshamaryam1/cooked-ml-collab/pull/19); transcript
+  `docs/evidence/08-ci-passing.txt`, run linked there for the screenshot
 
 ## CI checks (required status checks once Module 08 lands)
 
-- [ ] `lint` — `ruff check` + `ruff format --check`
-- [ ] `test` — `pytest tests/`
-- [ ] `data-check` — schema, ranges, null counts
-- [ ] `smoke-train` — end-to-end on a few hundred rows
-- [ ] Bonus: CML metrics comment on PRs (+5)
+- [x] `lint` — `ruff check` + `ruff format --check`
+- [x] `test` — `pytest tests/`
+- [x] `data-check` — schema, ranges, null counts
+- [x] `smoke-train` — end-to-end on a few hundred rows
+- [ ] Bonus: CML metrics comment on PRs (+5) — not attempted (the module doc says the +5 is not
+  worth a red pipeline; it needs a token that would have to live in repo secrets)
 
 ## Reproducibility record for the released model
 
