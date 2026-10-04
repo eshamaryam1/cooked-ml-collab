@@ -5,8 +5,8 @@ stages:
     deps:
     - path: data/raw/california_housing.csv
       hash: md5
-      md5: b2a3a690f28c00947f021c0c721492f3
-      size: 1426282
+      md5: 8a862f33970de79c84a533bf841050cc
+      size: 1426634
     - path: params.yaml
       hash: md5
       md5: 9382adc4a71a56830566e06f8acd050e
@@ -98,5 +98,5 @@ stages:
     outs:
     - path: metrics.json
       hash: md5
-      md5: 0ba0987e85fbd5674e59ebe0f7576043
+      md5: 4360f64b875ac1c087b0c02cb836b052
       size: 595
