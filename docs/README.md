@@ -14,7 +14,7 @@ for `REPORT.md`.
 Everyone codes and everyone reviews. Phase 7 requires **2 authored + 2 reviewed PRs per person**.
 
 - Repository: <https://github.com/eshamaryam1/cooked-ml-collab> (public)
-- Instructor: added as a viewer once the username is available
+- Instructor: no invite needed — the repo is public (team decision, 2026-10-04)
 - Dataset: California Housing (regression), from
   <https://github.com/mikel-brostrom/Housing_Price_Prediction> (starter code adapted from that repo;
   the underlying data is `sklearn.datasets.fetch_california_housing`)
@@ -29,7 +29,7 @@ Do these in order. Each one depends on the previous.
 
 | # | Module | Owner | Status |
 |---|---|---|---|
-| 1 | [Module 01 — Team & repo setup](MODULE_01_setup.md) | both | In progress — instructor invite outstanding |
+| 1 | [Module 01 — Team & repo setup](MODULE_01_setup.md) | both | Complete |
 | 2 | [Module 02 — Scaffold & initial import](MODULE_02_scaffold.md) | both | Complete |
 | 3 | [Module 03 — Guard rails: pre-commit & secrets](MODULE_03_precommit.md) | Nimra | Complete |
 | 4 | [Module 04 — Version the data with DVC](MODULE_04_dvc.md) | Nimra | Complete |
@@ -37,7 +37,7 @@ Do these in order. Each one depends on the previous.
 | 6 | [Module 06 — Reproducible DVC pipeline](MODULE_06_pipeline.md) | Esha | Complete |
 | 7 | [Module 07 — Experiments & pull requests](MODULE_07_experiments_prs.md) | both | Complete |
 | 8 | [Module 08 — CI on every pull request](MODULE_08_ci.md) | Esha (took over from Nimra) | Complete |
-| 9 | [Module 09 — Release: dev → staging → main](MODULE_09_release.md) | both | Not started |
+| 9 | [Module 09 — Release: dev → staging → main](MODULE_09_release.md) | both | Complete |
 
 Progress is tracked in [PROGRESS.md](PROGRESS.md). Shared rules live in
 [PLAYBOOK.md](PLAYBOOK.md) — read that before your first PR.
@@ -56,8 +56,9 @@ Progress is tracked in [PROGRESS.md](PROGRESS.md). Shared rules live in
 
 - **`dvc push` before `git push`, every time.** A missing `dvc push` leaves your teammate with a
   broken pointer and they cannot reproduce anything.
-- **The raw CSV is ~2.4 MB, so `check-added-large-files` (1 MB limit) will block a plain
-  `git add data/raw/*.csv`.** With DVC you only ever stage the `.dvc` pointer plus `data/.gitignore`.
+- **The raw CSV is ~1.4 MB (1,426,634 bytes), so `check-added-large-files` (1 MB limit) will block
+  a plain `git add data/raw/*.csv`.** With DVC you only ever stage the `.dvc` pointer plus
+  `data/.gitignore`.
 - **Never run `dvc exp` with uncommitted changes.** The commit SHA logged in `metrics.json` must
   match the code that produced it.
 - **The starter code leaks data**: it fits the `StandardScaler` on the full dataset before

@@ -1,0 +1,60 @@
+Module 09 evidence — branch protection for the three release branches.
+Captured 2026-10-04 by @Nimra-Saleem29 (the rules themselves were applied 2026-10-01/2026-10-04
+by @eshamaryam1, the repo owner — a personal-account repo only has owner + write-collaborator
+roles, so only she can read/write protection; the detail below comes from the API transcript she
+recorded at the time, cross-checked with what this account can still verify).
+
+WHAT THE RULES ARE (both branches, applied via the branch-protection API)
+-------------------------------------------------------------------------
+  pattern            : main / staging / dev   (one rule per branch)
+  required PR        : yes (pull requests only, no direct pushes — push to dev is rejected
+                        with `GH006 Changes must be made through a pull request`)
+  required approvals : 1
+  enforce_admins     : true  (even the owner cannot bypass)
+  conversation resolution : required
+  force pushes       : denied
+  branch deletions   : denied
+  required status checks (module 08, set 2026-10-04):
+      lint, test, data-check, smoke-train   (strict: false — status must be present+successful,
+                                             a fresh head commit does not need re-approval)
+
+WHAT THIS (Nimra, write) ACCOUNT CAN STILL VERIFY LIVE
+-------------------------------------------------------
+  $ gh api repos/eshamaryam1/cooked-ml-collab/branches/main --jq .protected
+  true
+  $ gh api repos/eshamaryam1/cooked-ml-collab/branches/staging --jq .protected
+  true
+  $ gh api repos/eshamaryam1/cooked-ml-collab/branches/dev --jq .protected
+  true
+
+  $ gh api repos/eshamaryam1/cooked-ml-collab --jq .default_branch
+  main
+
+  Reading the rule bodies needs admin and returns 404 for a write collaborator
+  (that 404 is itself consistent with the owner-only protection above).
+
+PROOF THAT THE REQUIRED CHECKS ACTUALLY BLOCK A MERGE (checkpoint 8)
+--------------------------------------------------------------------
+  $ gh pr checks 20          # the deliberately broken test, PR #20
+  test          fail   13s
+  data-check    pass   9s
+  lint          pass   11s
+  report        pass   2s
+  smoke-train   pass   16s
+
+  $ gh pr view 20 --json state,mergeStateStatus
+  {"state":"CLOSED","merge":"BLOCKED"}
+
+  $ gh pr merge 20 --squash
+  -> refused: "the base branch policy prohibits the merge"
+
+  Full transcript, the red run URLs and the refused merge attempt:
+  docs/evidence/08-ci-failing.txt   (the green counterpart: 08-ci-passing.txt)
+
+REVIEW GATES OBSERVED DURING THE RELEASE
+----------------------------------------
+  $ gh pr view 21 --json mergeStateStatus,reviewDecision   # release dev -> staging
+  {"rev":"REVIEW_REQUIRED","s":"BLOCKED"}                  # author cannot approve own PR
+  $ gh pr view 22 --json mergeStateStatus,reviewDecision   # release staging -> main
+  {"rev":"REVIEW_REQUIRED","s":"BLOCKED"}
+  Both went green only after @eshamaryam1 approved — the 1-approval rule working as configured.

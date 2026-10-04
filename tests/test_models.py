@@ -9,6 +9,7 @@ import joblib
 import numpy as np
 import pandas as pd
 import pytest
+import yaml
 from sklearn.ensemble import GradientBoostingRegressor, RandomForestRegressor
 from sklearn.linear_model import LinearRegression
 
@@ -205,3 +206,27 @@ def test_metrics_payload_is_byte_stable_and_records_provenance() -> None:
     assert first["commit_sha"] == current_commit_sha()
     assert first["data"]["raw_dvc_md5"] == dvc_pointer_md5(params["data"]["raw_path"])
     assert first["data"]["raw_sha256"] == file_hash(params["data"]["raw_path"])
+
+
+def test_evaluate_reports_a_clean_error_when_metrics_cannot_be_written(
+    tmp_path: Path, capsys
+) -> None:
+    """Module 09 hotfix: an unwritable metrics.json is a clean error, not a traceback."""
+    params = load_params()
+    required = [
+        Path(params["data"]["raw_path"]),
+        Path(params["artifacts"]["model_path"]),
+        Path("data/processed/train.csv"),
+        Path("data/processed/test.csv"),
+    ]
+    if not all(path.is_file() for path in required):
+        pytest.skip("pipeline artefacts missing — run `uv run dvc repro` first")
+
+    blocked = tmp_path / "metrics.json"
+    blocked.mkdir()
+    params["artifacts"]["metrics_path"] = str(blocked)
+    config_file = tmp_path / "params.yaml"
+    config_file.write_text(yaml.safe_dump(params), encoding="utf-8")
+
+    assert main(["evaluate", "--params", str(config_file)]) == 1
+    assert "cannot write" in capsys.readouterr().err
