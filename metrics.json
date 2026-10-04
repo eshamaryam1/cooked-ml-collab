@@ -4,7 +4,7 @@
   "n_train": 16512,
   "n_test": 4128,
   "seed": 42,
-  "commit_sha": "c2ba5a517a3cc2407b9f170f60ffd78d18604ed9",
+  "commit_sha": "ca24fb7fd2ad05c0a4edb9c618b38a1d32ac1e42",
   "params": {
     "model": "gradient_boosting",
     "n_estimators": 100,
