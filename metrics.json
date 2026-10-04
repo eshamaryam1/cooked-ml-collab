@@ -1,14 +1,14 @@
 {
-  "r2": 0.8133102001322212,
-  "mae": 0.3172693708142629,
+  "r2": 0.8358374154053576,
+  "mae": 0.30230096584649524,
   "n_train": 16512,
   "n_test": 4128,
   "seed": 42,
-  "commit_sha": "ca24fb7fd2ad05c0a4edb9c618b38a1d32ac1e42",
+  "commit_sha": "368f7b26ba45784330b9f0d19a03dc93d567e0b1",
   "params": {
     "model": "gradient_boosting",
     "n_estimators": 100,
-    "max_depth": 12,
+    "max_depth": 8,
     "min_samples_leaf": 1,
     "test_size": 0.2,
     "scale": true,
