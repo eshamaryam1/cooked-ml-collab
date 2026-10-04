@@ -247,9 +247,10 @@ Fill in the PR log, experiment table and abandoned-branch box in
   [PR #15](https://github.com/eshamaryam1/cooked-ml-collab/pull/15) and verified by Esha on #11 —
   still needs linking in `REPORT.md` (Module 09)
 - [x] Data-update PR showing old and new data versions via `dvc checkout` —
-  [PR #11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11) (open; v1 `b2a3a690…` vs v2
-  `8a862f33…` both reproduced in the body; branch now conflicts with `dev` after #14 and #13 —
-  one `params.yaml` / `dvc.lock` / `metrics.json` rebase left before merge)
+  [PR #11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11): v1 `b2a3a690…` vs v2
+  `8a862f33…` both reproduced in the body; rebased onto #13 after #14/#13 moved `params.yaml` /
+  `dvc.lock` / `metrics.json`, Esha re-verified on the rebased head (`ee57643`) — 20,645 raw rows
+  → 20,640 after dedupe, metrics unchanged — approved and squash-merged as `9c2870d`
 - [x] Conflict-resolution PR documented — [PR #13](https://github.com/eshamaryam1/cooked-ml-collab/pull/13):
   rebased onto [PR #14](https://github.com/eshamaryam1/cooked-ml-collab/pull/14)'s `4906d30`,
   `params.yaml` conflict output pasted in the body, both intents kept (`max_depth: 8` +
