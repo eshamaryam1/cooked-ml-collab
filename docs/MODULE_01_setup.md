@@ -32,8 +32,8 @@ Esha. Verified state:
 Collaborators still to add (Settings → Collaborators and teams, or with the GitHub CLI):
 
 - Add `@Nimra-Saleem29` → **Write**
-- Add the instructor → **Read** (viewer). **Still pending** — the instructor's GitHub username is
-  not known yet.
+- Add the instructor → **Read** (viewer). **Not required** — team decision 2026-10-04: the repo is
+  public, so the instructor/grader can read it without an invite and there is no username to add.
 
 GitHub CLI is installed at `C:\Program Files\GitHub CLI\gh.exe` for this. After `gh auth login`:
 
@@ -110,7 +110,8 @@ Settings → Actions → General → **Allow GitHub Actions to create and approv
 
 ## Checkpoint evidence
 
-- [x] Repo exists with both members at Write and the instructor at Read
+- [x] Repo exists with both members at Write (instructor-viewer invite **not required** — team
+  decision 2026-10-04, the repo is public)
 - [x] Each member has at least one pushed commit under their own name
 - [x] `git log` in each clone shows the author name and email matching GitHub
 
