@@ -96,6 +96,33 @@ once for any PR that touches `src/`, `dvc.yaml` or `params.yaml`, and paste what
 into the PR. Requesting changes at least once during the project is a requirement, not a
 formality.
 
+## What actually bit us (Module 09 retrospective)
+
+These are not hypotheticals — each line below exists because it broke something here, and the
+incident is linked from [`REPORT.md`](REPORT.md) §8.
+
+- **The raw CSV is never `git add`ed — DVC only.** It is 1,426,634 bytes, over the 1 MB
+  `check-added-large-files` cap, so a plain `git add data/raw/*.csv` is refused (Module 04).
+  Stage the `.dvc` pointer and DVC's per-file `.gitignore`; `dvc push` first, then `git push`.
+- **Keep the tree LF, and re-check `dvc status` after any cross-machine checkout.**
+  `core.autocrlf=true` rewrote `dvc.lock`/`metrics.json` line endings on checkout, so DVC's
+  recorded md5s never matched and `dvc status` stayed permanently dirty — this was Esha's
+  *changes requested* item 2 on PR #11. `.gitattributes` (`* text=auto eol=lf`) plus
+  `git add --renormalize .` fixed it in PR #15; if it ever reappears:
+  `dvc checkout && git rm --cached -r . && git reset --hard`.
+- **Run `dvc exp` only on committed code.** `metrics.json` records `commit_sha` from
+  `git rev-parse HEAD` at run time — a run on a dirty tree logs provenance that matches nothing.
+- **Rebase `feat/*` onto `dev` before you ask for review** (already the rule; PRs #10 and #11 both
+  needed a rebase mid-review because `dev` squash-merged underneath them).
+- **Sync a hotfix back into `dev` by cherry-picking onto a branch off `dev` — never branch from
+  `main`.** `staging`/`main` are rebase-merged, so their history is a replayed copy of `dev`'s;
+  branching from `main` produced a `DIRTY` PR with conflicts in exactly the hotfix files
+  (PR #24's first attempt). `git switch -c fix/sync-main-to-dev dev && git cherry-pick <sha>`
+  gives the same content with a reviewable diff.
+- **Open release PRs early.** Required checks + the 1-approval rule gate `staging`/`main`, and an
+  author cannot approve their own PR — the release train only moves when the teammate is online
+  (the Module 08 handoff was made because one member's machine died mid-module).
+
 ## Commands we use a lot
 
 ```bash

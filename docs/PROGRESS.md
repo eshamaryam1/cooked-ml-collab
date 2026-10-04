@@ -3,7 +3,7 @@
 Tick a box only when the checkpoint in that module is actually demonstrated in the repo.
 Update the tables as you go — this file is the running log the two of us read before every PR.
 
-**Overall status: 7 / 9 modules complete**
+**Overall status: 8 / 9 modules complete** (M01's instructor invite is the only open line)
 
 ---
 
@@ -191,7 +191,37 @@ Update the tables as you go — this file is the running log the two of us read 
   - [x] Deviations recorded in [PR #19](https://github.com/eshamaryam1/cooked-ml-collab/pull/19)'s
     body; CML bonus (+5) **not attempted** — the module doc itself says the +5 is not worth a red
     pipeline, and it needs a token this PR cannot safely add
-- [ ] **M09 — Release & report** (both) — started: — · done: —
+- [x] **M09 — Release & report** (both) — started: 2026-10-04 · done: 2026-10-04
+  - [x] Step 1 — release PR `dev → staging` **`release: v1.0`** —
+    [PR #21](https://github.com/eshamaryam1/cooked-ml-collab/pull/21): all five checks green,
+    body lists the 19 included PRs, the released-model metrics and the repro commands; Esha
+    approved (author cannot self-approve), rebase-merged → `8e53163`,
+    `git diff origin/staging origin/dev` empty
+  - [x] Step 2 — **independent reproduction** by Nimra (who did not train the final model) in a
+    fresh clone outside the working repo at the PR head `cf57ca7`: `uv sync` → `dvc pull` →
+    `dvc repro --force` → r2 0.8415635827935704, MAE 0.294844375210418, counts, params and data
+    hashes all identical (only `commit_sha` differs — by design), model/split outs byte-identical,
+    `dvc status` up to date afterwards. Evidence: comment on [#21](https://github.com/eshamaryam1/cooked-ml-collab/pull/21#issuecomment-5983279345)
+    + `docs/evidence/09-reproduction.md`
+  - [x] Step 3 — release PR `staging → main` **`release: model-v1.0`** —
+    [PR #22](https://github.com/eshamaryam1/cooked-ml-collab/pull/22) → rebase-merged → `e2449f8`,
+    tree identical to `dev`/`staging`
+  - [x] Step 4 — annotated tag `model-v1.0` on `e2449f8` pushed to origin + GitHub release with
+    the metrics, params and reproduction commands —
+    <https://github.com/eshamaryam1/cooked-ml-collab/releases/tag/model-v1.0>
+  - [x] Step 5 — hotfix (module doc: one problem with a released tag): an unwritable
+    `metrics.json` escaped `main()`'s handler as a raw traceback; `cmd_evaluate` now wraps
+    `mkdir`/`write_text` in `try/except OSError → ValueError`, plus a regression test
+    → **46 tests passed**, `ruff` + pre-commit clean —
+    [PR #23](https://github.com/eshamaryam1/cooked-ml-collab/pull/23) → `48c07f2`, tagged
+    [`model-v1.0.1`](https://github.com/eshamaryam1/cooked-ml-collab/releases/tag/model-v1.0.1);
+    synced back into `dev` with [PR #24](https://github.com/eshamaryam1/cooked-ml-collab/pull/24)
+    (first attempt went `DIRTY` because branching off the rebase-merged `main` gave a three-dot
+    diff against dev's merge-base — regenerated as `dev` + cherry-pick of `48c07f2`, content
+    delta = the hotfix only, 34+/2−)
+  - [x] Step 6/7 — retrospective + `REPORT.md`, `docs/evidence/09-reproduction.md`,
+    `docs/evidence/09-branch-protection.txt`, and the "What actually bit us" rules added to
+    `CONTRIBUTING.md` (this PR)
 
 ## Assignment checkpoints
 
@@ -203,9 +233,9 @@ Update the tables as you go — this file is the running log the two of us read 
 | 4 | CSV is not in Git history, only its `.dvc` pointer | Esha | 2026-10-03 | ☑ (`git log --all` and `rev-list --objects --all` both empty; `docs/evidence/04-dvc-no-csv-history.png`) |
 | 5 | PR diff shows no cell outputs or execution counts | Nimra | 2026-10-03 | ☑ (Nimra approved PR #5; squash `fb2b61e` — notebook merged with `outputs=0`/`execution_count=0`) |
 | 6 | Teammate on a fresh clone: `dvc pull && dvc repro` gives identical metrics | Nimra | 2026-10-03 | ☑ (fresh clone at `b3bf3bc`; SHA256 `4C95763D…CDDE9DAC` identical to Esha's, pasted in [PR #6 comment](https://github.com/eshamaryam1/cooked-ml-collab/pull/6#issuecomment-5970244357)) |
-| 7 | Every member is both author and reviewer; ≥1 "changes requested" review | both | 2026-10-04 | ☑ (authored merged: Esha #1/#5/#6/#8/#10/#14/#17, Nimra #2/#3/#4/#7/#9/#12/#13/#15/#16; each has reviewed the other's PRs; "Changes requested" by Esha on [PR #11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11)) |
+| 7 | Every member is both author and reviewer; ≥1 "changes requested" review | both | 2026-10-04 | ☑ (authored merged: Esha #1/#5/#6/#8/#10/#14/#16/#17/#19, Nimra #2/#3/#4/#7/#9/#11/#12/#13/#15/#18/#21/#22/#23/#24; each has reviewed the other's PRs; "Changes requested" by Esha on [PR #11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11)) |
 | 8 | A deliberately broken test causes a red check that blocks merging | Esha | 2026-10-04 | ☑ ([PR #20](https://github.com/eshamaryam1/cooked-ml-collab/pull/20): `test` **FAILED** (13 s) while `lint`/`data-check`/`smoke-train` passed; `gh pr merge --squash` refused with *"the base branch policy prohibits the merge"*, `mergeState=BLOCKED`, and `--admin` is no way out because `enforce_admins` is on — full transcript in `docs/evidence/08-ci-failing.txt`) |
-| 9 | `model-v1.0` exists on `main` and the independent reproduction matched | — | — | ☐ |
+| 9 | `model-v1.0` exists on `main` and the independent reproduction matched | Nimra (repro) · both | 2026-10-04 | ☑ (annotated tag `model-v1.0` → `e2449f8` + [GitHub release](https://github.com/eshamaryam1/cooked-ml-collab/releases/tag/model-v1.0); fresh-clone run at `cf57ca7` reproduced **r2 0.8415635827935704 / MAE 0.294844375210418** exactly — [comment on #21](https://github.com/eshamaryam1/cooked-ml-collab/pull/21#issuecomment-5983279345), evidence `docs/evidence/09-reproduction.md`; hotfix tag `model-v1.0.1` → `48c07f2`) |
 
 ## Pull request log
 
@@ -229,11 +259,15 @@ Requirement: **2 authored + 2 reviewed per member**, at least one review with
 | 13 | feat: raise n_estimators to 200 (Module 07 step 5 — conflict resolved with Esha's max_depth 8) | Nimra | Esha (approved — ran it on the branch) | dev | merged (squash `2bf697b`) — [PR #13](https://github.com/eshamaryam1/cooked-ml-collab/pull/13) | Step 5 second half: rebased onto `4906d30` (#14), `params.yaml` conflict **resolved on camera keeping both intents** (`max_depth: 8` + `n_estimators: 200`), r2 0.81331 → 0.83584 (#14) → **0.84156**, mae 0.29484, artifact 4,924,090 bytes; Esha approved after checking it out — 45 tests, `ruff` clean, `dvc pull` + `dvc status -c` in sync, `dvc repro` skips all three stages, clean tree |
 | 14 | feat: raise model max depth to 8 (Module 07 step 5 — Esha's half, merge before #13) | Esha | Nimra (approved) | dev | merged (squash `4906d30`) — [PR #14](https://github.com/eshamaryam1/cooked-ml-collab/pull/14) | conflict-pair first half: `model.params.max_depth: 12 → 8`, r2 **0.81331 → 0.83584**, mae 0.31727 → 0.30230, artifact 18.2 MB → 2.78 MB, byte-identical `metrics.json` over two forced runs |
 | 15 | chore: force lf line endings with .gitattributes and fix the v1/v2 verify snippet | Nimra | Esha (approved) | dev | merged (squash `1893642`) — [PR #15](https://github.com/eshamaryam1/cooked-ml-collab/pull/15) | **the fix PR for both changes-requested items on [#11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11)**: `* text=auto eol=lf` + `git add --renormalize .` so `dvc status` stays clean under `core.autocrlf=true` (with the mandatory `git rm --cached -r . ; git reset --hard` refresh), and Step 4's v1 ref fixed `HEAD~1` → `origin/dev`/`HEAD~2`; Esha verified both end-to-end before merging |
-| 16 | docs: sync trackers with github (prs 12-15, checkpoint 7, module statuses) | Nimra | Esha (approved) | dev | merged (squash `1a5c189`) — [PR #16](https://github.com/eshamaryam1/cooked-ml-collab/pull/16) | tracker-only: PR-log rows 12–15, checkpoint 7 ☑ (both members author *and* reviewer, changes-requested present), `docs/README.md` M03/M04/M05 → Complete, M07 → In progress |
+| 16 | docs: sync trackers with github (prs 12-15, checkpoint 7, module statuses) | Esha | Nimra (approved) | dev | merged (squash `1a5c189`) — [PR #16](https://github.com/eshamaryam1/cooked-ml-collab/pull/16) | tracker-only: PR-log rows 12–15, checkpoint 7 ☑ (both members author *and* reviewer, changes-requested present), `docs/README.md` M03/M04/M05 → Complete, M07 → In progress |
 | 17 | docs: log the #13 and #11 merges — conflict-resolution box, data v2 shipped, checkpoint 7 | Esha | Nimra (approved) | dev | merged (squash `40da38d`) — [PR #17](https://github.com/eshamaryam1/cooked-ml-collab/pull/17) | log-only: data-update ☑ and conflict-resolution ☑ boxes ticked with the real squash SHAs, rows 11/13 → merged, shipped-config paragraph updated to data v2 (`8a862f33…`) + r2 0.84156 / MAE 0.29484, checkpoint 7 author lists corrected |
 | 18 | docs: close module 07 — M07 done, status table → Complete (6/9) | Nimra | Esha (approved) | dev | merged (squash `dfec747`) — [PR #18](https://github.com/eshamaryam1/cooked-ml-collab/pull/18) | Module 07 close-out: `PROGRESS.md` M07 ☑ done 2026-10-04, overall 5/9 → 6/9, `docs/README.md` row 7 → Complete |
-| 19 | ci: run lint, tests, data-check and smoke train on every pull request | Esha | Nimra (review requested) | dev | open — [PR #19](https://github.com/eshamaryam1/cooked-ml-collab/pull/19) | Module 08: `.github/workflows/ci.yml` (4 jobs + `report`, PRs into dev/staging/main), `scripts/check_data.py`, real 200-row `tests/fixtures/ci_sample.csv`, `configs/smoke.yaml` → credential-free smoke train (11.4 s local / 62 s in Actions); required status checks registered on all three branches; `docs/evidence/08-ci-passing.txt` |
+| 19 | ci: run lint, tests, data-check and smoke train on every pull request | Esha | Nimra (approved) | dev | merged (rebase `cf57ca7`) — [PR #19](https://github.com/eshamaryam1/cooked-ml-collab/pull/19) | Module 08: `.github/workflows/ci.yml` (4 jobs + `report`, PRs into dev/staging/main), `scripts/check_data.py`, real 200-row `tests/fixtures/ci_sample.csv`, `configs/smoke.yaml` → credential-free smoke train (11.4 s local / 62 s in Actions); required status checks registered on all three branches; `docs/evidence/08-ci-passing.txt` |
 | 20 | test: demo red ci check (throwaway, will not be merged) | Esha | — | dev | closed without merge — [PR #20](https://github.com/eshamaryam1/cooked-ml-collab/pull/20) | **checkpoint 8 evidence**: `test` red, three jobs green, `gh pr merge` refused, `mergeState=BLOCKED`; branch `chore/demo-red-ci` deleted; `docs/evidence/08-ci-failing.txt` |
+| 21 | release: v1.0 | Nimra | Esha (approved) | staging | merged (rebase `8e53163`) — [PR #21](https://github.com/eshamaryam1/cooked-ml-collab/pull/21) | Module 09 step 1: the 19 included PRs, released-model metrics and repro commands in the body; step 2's **independent-reproduction comment** posted before the merge; `git diff origin/staging origin/dev` empty |
+| 22 | release: model-v1.0 | Nimra | Esha (approved) | main | merged (rebase `e2449f8`) — [PR #22](https://github.com/eshamaryam1/cooked-ml-collab/pull/22) | step 3: staging → main, tree identical to `dev`/`staging`; step 4: tag `model-v1.0` + GitHub release on this SHA |
+| 23 | fix: report a clean error when metrics.json cannot be written | Nimra | Esha (approved) | main | merged (rebase `48c07f2`) — [PR #23](https://github.com/eshamaryam1/cooked-ml-collab/pull/23) | step 5 hotfix: raw `PermissionError` traceback reproduced first, then `OSError → ValueError` in `cmd_evaluate` + `test_evaluate_reports_a_clean_error_when_metrics_cannot_be_written`, 46 tests green; tagged `model-v1.0.1` |
+| 24 | sync: bring the model-v1.0.1 hotfix from main back into dev | Nimra | Esha (approved) | dev | merged (squash `5ce869b`) — [PR #24](https://github.com/eshamaryam1/cooked-ml-collab/pull/24) | branch regenerated as `origin/dev` + cherry-pick of `48c07f2` after the first attempt went `DIRTY` (three-dot diff against the rebased `main`); content delta = the hotfix only, `git diff 48c07f2 HEAD -- src tests` empty; `dev` now carries the `model-v1.0.1` fix |
 
 Required PRs to link in `REPORT.md`:
 
@@ -246,9 +280,13 @@ Required PRs to link in `REPORT.md`:
 - [x] A review with "Changes requested" — Esha on [PR #11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11),
   2026-10-04; both items fixed by Nimra in [PR #15](https://github.com/eshamaryam1/cooked-ml-collab/pull/15)
   and verified by Esha on #11
-- [ ] Release PR `dev → staging` (titled `release: v1.0`)
-- [ ] Release PR `staging → main`
-- [ ] One `exp/` branch that was abandoned
+- [x] Release PR `dev → staging` (titled `release: v1.0`) — [PR #21](https://github.com/eshamaryam1/cooked-ml-collab/pull/21):
+  approved by Esha, all five checks green, rebase-merged → `8e53163`
+- [x] Release PR `staging → main` — [PR #22](https://github.com/eshamaryam1/cooked-ml-collab/pull/22):
+  rebase-merged → `e2449f8`, tagged `model-v1.0` (+ hotfix [PR #23](https://github.com/eshamaryam1/cooked-ml-collab/pull/23)
+  → `48c07f2`, tagged `model-v1.0.1`, synced back via [PR #24](https://github.com/eshamaryam1/cooked-ml-collab/pull/24))
+- [x] One `exp/` branch that was abandoned — `exp/nimra-ldm`, explained in `REPORT.md` §5 and in
+  the Experiment drift section below
 
 ## Experiment log
 
@@ -290,14 +328,13 @@ historical runs, not the shipped configuration.
 
 ## Experiment drift
 
-- [ ] At least one `exp/` branch kept unmerged and explained in `REPORT.md` (branch: `exp/nimra-ldm`)
+- [x] At least one `exp/` branch kept unmerged and explained in `REPORT.md` (branch: `exp/nimra-ldm`)
   - Pushed to origin as evidence and **never merged**: linear regression on the same split scores
     r2 **0.57579** / mae **0.53320** against the promoted model's 0.81331 / 0.31727
     (`exp-esha-gbr`, [PR #10](https://github.com/eshamaryam1/cooked-ml-collab/pull/10)) — and
     against 0.84156 / 0.29484 for what `dev` ships after [#13](https://github.com/eshamaryam1/cooked-ml-collab/pull/13)
     — an honest negative result. Promoting it would have cost ~0.27 r2, which is why it stays
-    abandoned. The written explanation lands in `REPORT.md` when Module 09 opens it (box stays
-    unticked until then).
+    abandoned. Written up in `REPORT.md` §5 (box ticked with Module 09).
 
 ## Screenshots needed for `REPORT.md`
 
@@ -323,14 +360,14 @@ historical runs, not the shipped configuration.
 
 ## Reproducibility record for the released model
 
-Fill this in from `metrics.json` on `main` at tag `model-v1.0`.
+Filled in from `metrics.json` on `main` at tag `model-v1.0`.
 
 | Field | Value |
 |---|---|
-| Commit SHA | |
-| `params.yaml` values | |
-| Data `.dvc` hash (`md5` of the raw CSV) | |
-| `dvc.lock` | |
-| Seed | |
-| Final metrics (r2, MAE) | |
-| Independent reproduction metrics (member: ) | |
+| Commit SHA | `e2449f83cb03c1ca4d232ffc35341a5f3f2be540` (annotated tag `model-v1.0`; hotfix tag `model-v1.0.1` → `48c07f2`) |
+| `params.yaml` values | `seed: 42` · `data: {raw_path: data/raw/california_housing.csv, cache_dir: data/raw/sklearn_cache, processed_dir: data/processed, target: MedHouseVal, test_size: 0.2, drop_duplicates: true, max_rows: null}` · `preprocessing: {scale: true, impute_strategy: median}` · `model: {name: gradient_boosting, params: {max_depth: 8, n_estimators: 200, min_samples_leaf: 1, n_jobs: 1}}` · `artifacts: {model_path: models/model.joblib, metrics_path: metrics.json}` |
+| Data `.dvc` hash (`md5` of the raw CSV) | `8a862f33970de79c84a533bf841050cc` (content `sha256 130b4a03a5ae54a47acca4a6797203b4da62afadf6349259fab6fb4085c6dc5d`, 1,426,634 bytes, 20,645 rows) |
+| `dvc.lock` | file `md5 d18b75f8de2ae6168e7fd42fb2c5085e`; outs `metrics.json 4360f64b875ac1c087b0c02cb836b052`, `model.joblib 6b47afe735424d126bf46babcc8ff87f`, `train.csv 26a4ba5db29872e0a4d7ba8e830e109d`, `test.csv c9371e937007c2bb8a72705a50ca2525` |
+| Seed | 42 (`PYTHONHASHSEED` + `random` + `numpy`, split and estimator `random_state`) |
+| Final metrics (r2, MAE) | **0.8415635827935704** / **0.294844375210418** (n_train 16,512 · n_test 4,128) |
+| Independent reproduction metrics (member: Nimra) | r2 **0.8415635827935704**, MAE **0.294844375210418** — **matches exactly**, fresh clone at `cf57ca7`, only `commit_sha` differs (by design); evidence `docs/evidence/09-reproduction.md` + [comment on #21](https://github.com/eshamaryam1/cooked-ml-collab/pull/21#issuecomment-5983279345) |
