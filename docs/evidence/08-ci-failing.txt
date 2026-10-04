@@ -1,0 +1,73 @@
+Module 08 — checkpoint 8 evidence: a deliberately broken test turns `test` red and the
+required status checks block the merge.
+Captured 2026-10-04 by @eshamaryam1. Companion: 08-ci-passing.txt
+
+REPRODUCING IT
+--------------
+  git switch -c chore/demo-red-ci          # from feat/ci (dev's CI lands with PR #19)
+  # tests/test_models.py gains:
+  def test_demo_broken() -> None:
+      from cooked_ml.models import build_model
+      assert build_model({"model": "random_forest", "n_estimators": 100, "max_depth": 6}, 42) is None
+  git push -u origin chore/demo-red-ci
+  gh pr create --base dev --head chore/demo-red-ci     # PR #20
+
+1) THE TEST IS RED LOCALLY (everything else stays green)
+
+  $ uv run pytest tests/test_models.py::test_demo_broken -q
+  F                                                                        [100%]
+  ============================= FAILURES =============================
+  >       assert build_model({"model": "random_forest", "n_estimators": 100, "max_depth": 6}, 42) is None
+  E       AssertionError: assert RandomForestRegressor(random_state=42) is None
+  FAILED tests/test_models.py::test_demo_broken - AssertionError: assert Random...
+  pytest_exit=1
+
+  $ uv run ruff check .          -> All checks passed!        (lint job stays green)
+  $ uv run ruff format --check . -> 27 files already formatted
+
+2) THE PULL REQUEST RUN — three jobs green, `test` FAILED
+
+  $ gh pr checks 20
+  test          fail   13s  .../actions/runs/37223521998/job/111498402339
+  data-check    pass    9s  .../actions/runs/37223521998/job/111498402584
+  lint          pass   11s  .../actions/runs/37223521998/job/111498402605
+  report        pass    2s  .../actions/runs/37223521998/job/111498468561
+  smoke-train   pass   16s  .../actions/runs/37223521998/job/111498402553
+
+  run 37223521998  branch=chore/demo-red-ci  event=pull_request  status=completed/failure  wallclock=24s
+  https://github.com/eshamaryam1/cooked-ml-collab/actions/runs/37223521998
+
+3) THE MERGE IS BLOCKED
+
+  $ gh pr view 20 --json mergeStateStatus,mergeable,statusCheckRollup
+  mergeState=BLOCKED  mergeable=MERGEABLE
+    lint: SUCCESS
+    test: FAILURE
+    data-check: SUCCESS
+    smoke-train: SUCCESS
+    report: SUCCESS
+
+  $ gh pr merge 20 --squash
+  X Pull request eshamaryam1/cooked-ml-collab#20 is not mergeable:
+    the base branch policy prohibits the merge.
+  To have the pull request merged after all the requirements have been met, add the `--auto` flag.
+  To use administrator privileges to immediately merge the pull request, add the `--admin` flag.
+  merge_exit=1
+
+  (--admin was NOT used: `enforce_admins` is on, so the repo owner cannot bypass it either.)
+
+WHICH RULES ARE DOING THE WORK
+------------------------------
+Required status checks on dev / staging / main, set 2026-10-04 with
+PUT /repos/eshamaryam1/cooked-ml-collab/branches/{branch}/protection:
+
+  contexts: ["lint", "test", "data-check", "smoke-train"]   strict: false
+  required_approving_review_count: 1
+  enforce_admins: true
+  required_conversation_resolution: true
+
+$ gh api repos/eshamaryam1/cooked-ml-collab/branches/dev/protection --jq ...
+  {"checks":["lint","test","data-check","smoke-train"],"req":1,"enforce":true,"conv":true}
+
+PR #20 was then closed without merging and chore/demo-red-ci deleted from origin.
+To see it on GitHub: https://github.com/eshamaryam1/cooked-ml-collab/pull/20

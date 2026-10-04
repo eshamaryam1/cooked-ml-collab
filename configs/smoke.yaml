@@ -2,12 +2,14 @@
 # the whole pipeline end to end in seconds.
 # Writes to its own directories (data/processed_smoke, models/smoke_*) so a
 # smoke run can never be mistaken for the real pipeline's outputs.
+# raw_path is the committed 200-row sample, not the DVC-tracked CSV: CI has no
+# DagsHub credentials and must never run `dvc pull` (Module 08 gotcha).
 # Overridden by: uv run python -m cooked_ml.cli prepare --params configs/smoke.yaml
 
 seed: 42
 
 data:
-  raw_path: data/raw/california_housing.csv
+  raw_path: tests/fixtures/ci_sample.csv
   cache_dir: data/raw/sklearn_cache
   processed_dir: data/processed_smoke
   target: MedHouseVal
