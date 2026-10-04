@@ -1,5 +1,5 @@
 outs:
-- md5: b2a3a690f28c00947f021c0c721492f3 # pragma: allowlist secret
-  size: 1426282
+- md5: 8a862f33970de79c84a533bf841050cc # pragma: allowlist secret
+  size: 1426634
   hash: md5
   path: california_housing.csv
