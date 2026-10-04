@@ -9,8 +9,8 @@ stages:
       size: 1426282
     - path: params.yaml
       hash: md5
-      md5: ee0c12b1535afa5d0458f83253d39da6
-      size: 615
+      md5: 27e8abb397b3b465b1044b13ed672152
+      size: 614
     - path: src/cooked_ml/cli.py
       hash: md5
       md5: 2c2ab0cae020fb045dc664a671d53a47
@@ -45,8 +45,8 @@ stages:
       size: 1141450
     - path: params.yaml
       hash: md5
-      md5: ee0c12b1535afa5d0458f83253d39da6
-      size: 615
+      md5: 27e8abb397b3b465b1044b13ed672152
+      size: 614
     - path: src/cooked_ml/cli.py
       hash: md5
       md5: 2c2ab0cae020fb045dc664a671d53a47
@@ -66,8 +66,8 @@ stages:
     outs:
     - path: models/model.joblib
       hash: md5
-      md5: 3f846045e37f2de385fe4398b62017db
-      size: 18169722
+      md5: c41ccbc51a1d4fa536a65c149fdab405
+      size: 2775978
   evaluate:
     cmd: uv run python -m cooked_ml.cli evaluate
     deps:
@@ -77,12 +77,12 @@ stages:
       size: 284918
     - path: models/model.joblib
       hash: md5
-      md5: 3f846045e37f2de385fe4398b62017db
-      size: 18169722
+      md5: c41ccbc51a1d4fa536a65c149fdab405
+      size: 2775978
     - path: params.yaml
       hash: md5
-      md5: ee0c12b1535afa5d0458f83253d39da6
-      size: 615
+      md5: 27e8abb397b3b465b1044b13ed672152
+      size: 614
     - path: src/cooked_ml/cli.py
       hash: md5
       md5: 2c2ab0cae020fb045dc664a671d53a47
@@ -98,5 +98,5 @@ stages:
     outs:
     - path: metrics.json
       hash: md5
-      md5: 44812bc44e7feacc32698327c12c66a7
+      md5: dc99f32e3f812a1a0696e308fc42d9a4
       size: 597
