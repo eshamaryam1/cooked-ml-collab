@@ -4,7 +4,7 @@
   "n_train": 16512,
   "n_test": 4128,
   "seed": 42,
-  "commit_sha": "4265a50f8712931ff77afb52b004121f3e99f63c",
+  "commit_sha": "18b7027dc3b63ea576f30084f0e2a0320cc1c4ff",
   "params": {
     "model": "gradient_boosting",
     "n_estimators": 200,
@@ -17,7 +17,7 @@
   },
   "data": {
     "raw_path": "data/raw/california_housing.csv",
-    "raw_sha256": "05817eef1b24d07428073579db624db1eeccda974211a026c26d6900dd9bb456",
-    "raw_dvc_md5": "b2a3a690f28c00947f021c0c721492f3"
+    "raw_sha256": "130b4a03a5ae54a47acca4a6797203b4da62afadf6349259fab6fb4085c6dc5d",
+    "raw_dvc_md5": "8a862f33970de79c84a533bf841050cc"
   }
 }
