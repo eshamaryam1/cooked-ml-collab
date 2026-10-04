@@ -176,7 +176,7 @@ Update the tables as you go — this file is the running log the two of us read 
 | 4 | CSV is not in Git history, only its `.dvc` pointer | Esha | 2026-10-03 | ☑ (`git log --all` and `rev-list --objects --all` both empty; `docs/evidence/04-dvc-no-csv-history.png`) |
 | 5 | PR diff shows no cell outputs or execution counts | Nimra | 2026-10-03 | ☑ (Nimra approved PR #5; squash `fb2b61e` — notebook merged with `outputs=0`/`execution_count=0`) |
 | 6 | Teammate on a fresh clone: `dvc pull && dvc repro` gives identical metrics | Nimra | 2026-10-03 | ☑ (fresh clone at `b3bf3bc`; SHA256 `4C95763D…CDDE9DAC` identical to Esha's, pasted in [PR #6 comment](https://github.com/eshamaryam1/cooked-ml-collab/pull/6#issuecomment-5970244357)) |
-| 7 | Every member is both author and reviewer; ≥1 "changes requested" review | both | 2026-10-04 | ☑ (authored merged: Esha #1/#5/#6/#8/#10/#14, Nimra #2/#3/#4/#7/#9/#12/#15; each has reviewed the other's PRs; "Changes requested" by Esha on [PR #11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11)) |
+| 7 | Every member is both author and reviewer; ≥1 "changes requested" review | both | 2026-10-04 | ☑ (authored merged: Esha #1/#5/#6/#8/#10/#14, Nimra #2/#3/#4/#7/#9/#12/#13/#15; each has reviewed the other's PRs; "Changes requested" by Esha on [PR #11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11)) |
 | 8 | A deliberately broken test causes a red check that blocks merging | — | — | ☐ |
 | 9 | `model-v1.0` exists on `main` and the independent reproduction matched | — | — | ☐ |
 
@@ -197,18 +197,18 @@ Requirement: **2 authored + 2 reviewed per member**, at least one review with
 | 8 | fix: ignore model params the selected estimator does not accept | Esha | Nimra (approved) | dev | merged (squash `74eb14e`) — [PR #8](https://github.com/eshamaryam1/cooked-ml-collab/pull/8) | checked out and ran: 45 tests, `ruff` clean, all three model families build from the shared `model.params` block, typo key still rejected |
 | 9 | docs: mark module 06 complete in the status table | Nimra | Esha (approved) | dev | merged (squash `9801ce0`) — [PR #9](https://github.com/eshamaryam1/cooked-ml-collab/pull/9) | `docs/README.md` Module 06 → Complete; PR-log row 7 |
 | 10 | feat: promote gradient boosting with r2 0.81331 from exp-esha-gbr | Esha | Nimra (approved) | dev | merged (squash `054f9a6`) — [PR #10](https://github.com/eshamaryam1/cooked-ml-collab/pull/10) | reopened, retargeted to `dev` and rebased (duplicated `#8` fix dropped), CRLF `dvc.lock` entry re-recorded as `cf49b73d…`, Nimra's three rows added; provenance `ca24fb7` = `gradient_boosting`, 45 tests + `ruff` clean |
-| 11 | data: re-export raw csv with 5 duplicate rows so dedupe has a real effect | Nimra | Esha (**changes requested** 2026-10-04 → **both items fixed & verified**) | dev | open — [PR #11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11) | data v1 → v2 (`b2a3a690…` → `8a862f33…`), 20,640 → 20,645 rows, metrics unchanged; both review items (v1/v2 verify snippet, dirty `dvc status` on a default Windows clone) were fixed by Nimra in [PR #15](https://github.com/eshamaryam1/cooked-ml-collab/pull/15) and Esha verified them on #11; branch is now **conflicting with `dev`** after #14 (`dvc.lock`, `metrics.json`) — one rebase left, then re-approve + merge |
+| 11 | data: re-export raw csv with 5 duplicate rows so dedupe has a real effect | Nimra | Esha (**changes requested** 2026-10-04 → **both items fixed & verified**) | dev | open — [PR #11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11) | data v1 → v2 (`b2a3a690…` → `8a862f33…`), 20,640 → 20,645 rows, metrics unchanged; both review items (v1/v2 verify snippet, dirty `dvc status` on a default Windows clone) were fixed by Nimra in [PR #15](https://github.com/eshamaryam1/cooked-ml-collab/pull/15) and Esha verified them on #11; branch is now **conflicting with `dev`** after #14 and #13 (`params.yaml`, `dvc.lock`, `metrics.json`) — one rebase left, then re-approve + merge |
 | 12 | docs: log module 07 prs, the abandoned exp branch and the data-update checkpoint | Nimra | Esha (approved) | dev | merged (squash `a0ccd91`) — [PR #12](https://github.com/eshamaryam1/cooked-ml-collab/pull/12) | tracker-only: PR-log rows 8–11, `M07 started: 2026-10-03`, `exp/nimra-ldm` drift slot, data-update box ticked, `docs/README.md` M07 → In progress |
-| 13 | feat: raise n_estimators to 200 (Module 07 step 5 — conflict resolved with Esha's max_depth 8) | Nimra | Esha (review requested) | dev | open — [PR #13](https://github.com/eshamaryam1/cooked-ml-collab/pull/13) | Step 5 second half: rebased onto `4906d30` (#14), `params.yaml` conflict **resolved on camera keeping both intents** (`max_depth: 8` + `n_estimators: 200`), r2 **0.84156** / mae 0.29484, artifact 4,924,090 bytes, `dvc status -c` in sync, `commit_sha 4265a50`; mergeable but **blocked on Esha's approval + intent confirmation** |
+| 13 | feat: raise n_estimators to 200 (Module 07 step 5 — conflict resolved with Esha's max_depth 8) | Nimra | Esha (approved — ran it on the branch) | dev | merged (squash `2bf697b`) — [PR #13](https://github.com/eshamaryam1/cooked-ml-collab/pull/13) | Step 5 second half: rebased onto `4906d30` (#14), `params.yaml` conflict **resolved on camera keeping both intents** (`max_depth: 8` + `n_estimators: 200`), r2 0.81331 → 0.83584 (#14) → **0.84156**, mae 0.29484, artifact 4,924,090 bytes; Esha approved after checking it out — 45 tests, `ruff` clean, `dvc pull` + `dvc status -c` in sync, `dvc repro` skips all three stages, clean tree |
 | 14 | feat: raise model max depth to 8 (Module 07 step 5 — Esha's half, merge before #13) | Esha | Nimra (approved) | dev | merged (squash `4906d30`) — [PR #14](https://github.com/eshamaryam1/cooked-ml-collab/pull/14) | conflict-pair first half: `model.params.max_depth: 12 → 8`, r2 **0.81331 → 0.83584**, mae 0.31727 → 0.30230, artifact 18.2 MB → 2.78 MB, byte-identical `metrics.json` over two forced runs |
 | 15 | chore: force lf line endings with .gitattributes and fix the v1/v2 verify snippet | Nimra | Esha (approved) | dev | merged (squash `1893642`) — [PR #15](https://github.com/eshamaryam1/cooked-ml-collab/pull/15) | **the fix PR for both changes-requested items on [#11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11)**: `* text=auto eol=lf` + `git add --renormalize .` so `dvc status` stays clean under `core.autocrlf=true` (with the mandatory `git rm --cached -r . ; git reset --hard` refresh), and Step 4's v1 ref fixed `HEAD~1` → `origin/dev`/`HEAD~2`; Esha verified both end-to-end before merging |
 
 Required PRs to link in `REPORT.md`:
 
 - [x] Data update PR (`data/<change>`) — [PR #11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11)
-- [ ] Conflict resolution PR — resolved and documented in
-  [PR #13](https://github.com/eshamaryam1/cooked-ml-collab/pull/13) (rebased onto #14, both
-  intents kept, r2 0.84156); still open — **tick when it merges**
+- [x] Conflict resolution PR — [PR #13](https://github.com/eshamaryam1/cooked-ml-collab/pull/13):
+  rebased onto #14, `params.yaml` conflict resolved keeping both intents, conflict output and
+  rationale in the body, Esha approved after running it → squash `2bf697b`
 - [x] A review with "Changes requested" — Esha on [PR #11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11),
   2026-10-04; both items fixed by Nimra in [PR #15](https://github.com/eshamaryam1/cooked-ml-collab/pull/15)
   and verified by Esha on #11
@@ -243,19 +243,23 @@ Winner promoted via `dvc exp apply`: `exp-esha-gbr` (gradient_boosting, r2 0.813
 **Shipped config superseded 2026-10-04** by [PR #14](https://github.com/eshamaryam1/cooked-ml-collab/pull/14)
 (Module 07 Step 5, Esha's half): `model.params.max_depth: 12 → 8` on the promoted booster →
 **r2 0.83584 / MAE 0.30230**, artifact 18,169,722 → 2,775,978 bytes, byte-identical `metrics.json`
-(md5 `DC99F32E…`) over two consecutive `dvc repro --force`. [PR #13](https://github.com/eshamaryam1/cooked-ml-collab/pull/13)
-is the still-open second half of the conflict pair — already rebased onto #14 and resolved with
-both intents kept (`max_depth: 8` + `n_estimators: 200`), measuring **r2 0.84156 / MAE 0.29484**
-on a 4,924,090-byte artifact. When it merges it becomes the shipped config. The experiment rows
-above stay as recorded — they are historical runs, not the shipped configuration.
+(md5 `DC99F32E…`) over two consecutive `dvc repro --force`, then again by
+[PR #13](https://github.com/eshamaryam1/cooked-ml-collab/pull/13) (merged squash `2bf697b`),
+which rebased into #14's conflict and kept both intents (`max_depth: 8` + `n_estimators: 200`).
+**Shipped on `dev` now: `gradient_boosting`, `n_estimators: 200`, `max_depth: 8` →
+r2 0.8415635827935704 / MAE 0.294844375210418**, artifact 4,924,090 bytes
+(`6b47afe7…`), data still v1 (`b2a3a690…`) until [PR #11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11)
+merges. The experiment rows above stay as recorded — they are historical runs, not the shipped
+configuration.
 
 ## Experiment drift
 
 - [ ] At least one `exp/` branch kept unmerged and explained in `REPORT.md` (branch: `exp/nimra-ldm`)
   - Pushed to origin as evidence and **never merged**: linear regression on the same split scores
-    r2 **0.57579** / mae **0.53320** against the shipped model's 0.81331 / 0.31727
-    (`exp-esha-gbr`, [PR #10](https://github.com/eshamaryam1/cooked-ml-collab/pull/10)) — an
-    honest negative result. Promoting it would have cost ~0.24 r2, which is why it stays
+    r2 **0.57579** / mae **0.53320** against the promoted model's 0.81331 / 0.31727
+    (`exp-esha-gbr`, [PR #10](https://github.com/eshamaryam1/cooked-ml-collab/pull/10)) — and
+    against 0.84156 / 0.29484 for what `dev` ships after [#13](https://github.com/eshamaryam1/cooked-ml-collab/pull/13)
+    — an honest negative result. Promoting it would have cost ~0.27 r2, which is why it stays
     abandoned. The written explanation lands in `REPORT.md` when Module 09 opens it (box stays
     unticked until then).
 

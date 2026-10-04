@@ -248,13 +248,13 @@ Fill in the PR log, experiment table and abandoned-branch box in
   still needs linking in `REPORT.md` (Module 09)
 - [x] Data-update PR showing old and new data versions via `dvc checkout` —
   [PR #11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11) (open; v1 `b2a3a690…` vs v2
-  `8a862f33…` both reproduced in the body; branch now conflicts with `dev` after #14 — one
-  `dvc.lock` / `metrics.json` rebase left before merge)
-- [ ] Conflict-resolution PR documented — the conflict is **already resolved and documented** in
-  [PR #13](https://github.com/eshamaryam1/cooked-ml-collab/pull/13): rebased onto
-  [PR #14](https://github.com/eshamaryam1/cooked-ml-collab/pull/14)'s `4906d30`, `params.yaml`
-  conflict output pasted in the body, both intents kept (`max_depth: 8` + `n_estimators: 200`),
-  r2 0.84156. Blocked only on Esha's approval — **tick when it merges**
+  `8a862f33…` both reproduced in the body; branch now conflicts with `dev` after #14 and #13 —
+  one `params.yaml` / `dvc.lock` / `metrics.json` rebase left before merge)
+- [x] Conflict-resolution PR documented — [PR #13](https://github.com/eshamaryam1/cooked-ml-collab/pull/13):
+  rebased onto [PR #14](https://github.com/eshamaryam1/cooked-ml-collab/pull/14)'s `4906d30`,
+  `params.yaml` conflict output pasted in the body, both intents kept (`max_depth: 8` +
+  `n_estimators: 200`), r2 0.84156. Esha approved after checking the branch out and running it —
+  squash-merged as `2bf697b`, 2026-10-04
 - [x] One unmerged `exp/` branch with a written explanation
 - [x] Every PR used the checklist template
 
