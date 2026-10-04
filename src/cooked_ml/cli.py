@@ -274,11 +274,18 @@ def cmd_evaluate(args: argparse.Namespace) -> int:
     payload = build_metrics(params, metrics, n_train=len(train_frame), n_test=len(test_frame))
 
     metrics_file = artifact_path(params, "metrics_path")
-    metrics_file.parent.mkdir(parents=True, exist_ok=True)
     # newline="\n": Windows text mode would emit CRLF, and the pre-commit
     # line-ending hook rewrites it to LF afterwards — which would change the
     # md5 DVC recorded for this file and leave `dvc status` permanently dirty.
-    metrics_file.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8", newline="\n")
+    # An OSError here (read-only file, path is a directory, disk full) must not
+    # escape as a raw traceback: the CLI contract is a clean stderr message.
+    try:
+        metrics_file.parent.mkdir(parents=True, exist_ok=True)
+        metrics_file.write_text(
+            json.dumps(payload, indent=2) + "\n", encoding="utf-8", newline="\n"
+        )
+    except OSError as error:
+        raise ValueError(f"cannot write {metrics_file}: {error}") from error
 
     print(json.dumps(payload, indent=2))
     return 0
