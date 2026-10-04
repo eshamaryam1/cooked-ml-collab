@@ -1,0 +1,50 @@
+Module 08 evidence: the four CI jobs go green on a clean PR, and fast.
+Captured 2026-10-04 by @eshamaryam1. Companion: 08-ci-failing.txt
+
+1) THE REAL GITHUB ACTIONS RUN ON PR #19 (feat/ci -> dev)
+
+  $ gh pr checks 19
+  lint          pass   11s  .../actions/runs/37222802486/job/111496364239
+  test          pass   15s  .../actions/runs/37222802486/job/111496364037
+  data-check    pass   11s  .../actions/runs/37222802486/job/111496364162
+  smoke-train   pass   17s  .../actions/runs/37222802486/job/111496364203
+  report        pass    3s  .../actions/runs/37222802486/job/111496547911
+
+  run 37222802486  branch=feat/ci  event=pull_request  status=completed/success  wallclock=62s
+  https://github.com/eshamaryam1/cooked-ml-collab/actions/runs/37222802486
+
+  All five jobs green in 62 seconds wall clock — the module asks for under ~5 minutes.
+
+2) THE SAME FOUR STEPS ON A MACHINE WITH NO data/raw/ AND NO DVC CREDENTIALS
+   (fresh clone of feat/ci into %TEMP%\ci-fresh-clone — this is what CI sees)
+
+  $ git clone --branch feat/ci <repo> ci-fresh-clone && cd ci-fresh-clone
+
+  $ uv sync --all-extras --dev            -> sync=0
+  $ uv run ruff check .                   -> All checks passed!
+  $ uv run ruff format --check .          -> 27 files already formatted
+
+  $ uv run pytest tests/ -q
+  ............................................s                            [100%]
+      -> 44 passed, 1 skipped (the metrics-provenance test skips itself without data/raw/,
+         which only exists via `dvc pull`; on a machine with the data it is 45 passed)
+
+  $ uv run python scripts/check_data.py
+  data-check: ok (tests/fixtures/ci_sample.csv)         -> dc=0
+
+  $ uv run python -m cooked_ml.cli prepare --params configs/smoke.yaml
+    "rows": 200, "n_train": 160, "n_test": 40, "duplicates_dropped": 0
+  $ uv run python -m cooked_ml.cli train --params configs/smoke.yaml
+    "model": "random_forest", "n_train": 160
+  $ uv run python -m cooked_ml.cli evaluate --params configs/smoke.yaml
+    "r2": 0.8212190833510056, "mae": 0.271643440556992,
+    "raw_path": "tests/fixtures/ci_sample.csv", "raw_dvc_md5": null
+                                                    -> smoke=0
+
+  No `dvc pull`, no DagsHub token, no network beyond `uv sync`.
+
+3) THE SAME RUN ON THE DEV MACHINE (data present)
+
+  $ uv run pytest tests/ -q     -> 45 passed
+  $ uv run ruff check .         -> All checks passed!
+  $ uv run dvc status           -> Data and pipelines are up to date.
