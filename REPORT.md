@@ -188,7 +188,7 @@ Checklist cover (assignment step 8):
 - [x] Three protected branches with required checks — `docs/evidence/09-branch-protection.txt`
 - [x] No dataset, model file or secret anywhere in Git history — checkpoint 4 ☑,
       `docs/evidence/04-dvc-no-csv-history.png`, `.secrets.baseline`
-- [x] `docs/PROGRESS.md` fully ticked — M01's single instructor-invite line stays open until the
-      instructor's GitHub username is known
+- [x] `docs/PROGRESS.md` fully ticked — **9/9 modules** (the instructor-viewer invite was ruled
+      not needed: the repo is public, so there is no username to add)
 - [x] A stranger can reproduce: `git clone && git checkout model-v1.0 && uv sync && dvc pull && dvc repro`
       → proven by the fresh-clone run in §3

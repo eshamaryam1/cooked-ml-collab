@@ -3,17 +3,18 @@
 Tick a box only when the checkpoint in that module is actually demonstrated in the repo.
 Update the tables as you go — this file is the running log the two of us read before every PR.
 
-**Overall status: 8 / 9 modules complete** (M01's instructor invite is the only open line)
+**Overall status: 9 / 9 modules complete**
 
 ---
 
 ## Modules
 
-- [ ] **M01 — Team & repo setup** (both) — started: 2026-09-29 · done: —
+- [x] **M01 — Team & repo setup** (both) — started: 2026-09-29 · done: 2026-10-04
   - [x] Repo created (public, empty) — `eshamaryam1/cooked-ml-collab`
   - [x] Esha's local `user.name` / `user.email` set
   - [x] Nimra added as collaborator (Write) — accepted, `push=true`
-  - [ ] Instructor added as viewer — username not known yet
+  - [x] Instructor added as viewer — **not required** (team decision, 2026-10-04): the repo is
+    public, the instructor can read it without an invite, so there is no username to add
   - [x] Esha proved she can push — branch `chore/check-push-esha`, commit `87d044c`
   - [x] Nimra's clone created and her identity configured — commit `880bed7` authored by
     `Nimra-Saleem29 <ns5999424@gmail.com>` on `chore/check-push-nimra`

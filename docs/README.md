@@ -14,7 +14,7 @@ for `REPORT.md`.
 Everyone codes and everyone reviews. Phase 7 requires **2 authored + 2 reviewed PRs per person**.
 
 - Repository: <https://github.com/eshamaryam1/cooked-ml-collab> (public)
-- Instructor: added as a viewer once the username is available
+- Instructor: no invite needed — the repo is public (team decision, 2026-10-04)
 - Dataset: California Housing (regression), from
   <https://github.com/mikel-brostrom/Housing_Price_Prediction> (starter code adapted from that repo;
   the underlying data is `sklearn.datasets.fetch_california_housing`)
@@ -29,7 +29,7 @@ Do these in order. Each one depends on the previous.
 
 | # | Module | Owner | Status |
 |---|---|---|---|
-| 1 | [Module 01 — Team & repo setup](MODULE_01_setup.md) | both | In progress — instructor invite outstanding |
+| 1 | [Module 01 — Team & repo setup](MODULE_01_setup.md) | both | Complete |
 | 2 | [Module 02 — Scaffold & initial import](MODULE_02_scaffold.md) | both | Complete |
 | 3 | [Module 03 — Guard rails: pre-commit & secrets](MODULE_03_precommit.md) | Nimra | Complete |
 | 4 | [Module 04 — Version the data with DVC](MODULE_04_dvc.md) | Nimra | Complete |
