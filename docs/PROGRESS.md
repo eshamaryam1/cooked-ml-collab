@@ -3,7 +3,7 @@
 Tick a box only when the checkpoint in that module is actually demonstrated in the repo.
 Update the tables as you go — this file is the running log the two of us read before every PR.
 
-**Overall status: 5 / 9 modules complete**
+**Overall status: 6 / 9 modules complete**
 
 ---
 
@@ -162,7 +162,7 @@ Update the tables as you go — this file is the running log the two of us read 
   - [x] Nimra reviewed (diff checked out, 41 tests + `ruff` run on the branch, fresh-clone
     reproduction matched), approved; squash merge — [PR #6](https://github.com/eshamaryam1/cooked-ml-collab/pull/6)
     → squash `1622d4d`, branch `feat/dvc-pipeline` deleted from origin
-- [ ] **M07 — Experiments & PRs** (both) — started: 2026-10-03 · done: —
+- [x] **M07 — Experiments & PRs** (both) — started: 2026-10-03 · done: 2026-10-04
 - [ ] **M08 — CI** (Nimra) — started: — · done: —
 - [ ] **M09 — Release & report** (both) — started: — · done: —
 
@@ -176,7 +176,7 @@ Update the tables as you go — this file is the running log the two of us read 
 | 4 | CSV is not in Git history, only its `.dvc` pointer | Esha | 2026-10-03 | ☑ (`git log --all` and `rev-list --objects --all` both empty; `docs/evidence/04-dvc-no-csv-history.png`) |
 | 5 | PR diff shows no cell outputs or execution counts | Nimra | 2026-10-03 | ☑ (Nimra approved PR #5; squash `fb2b61e` — notebook merged with `outputs=0`/`execution_count=0`) |
 | 6 | Teammate on a fresh clone: `dvc pull && dvc repro` gives identical metrics | Nimra | 2026-10-03 | ☑ (fresh clone at `b3bf3bc`; SHA256 `4C95763D…CDDE9DAC` identical to Esha's, pasted in [PR #6 comment](https://github.com/eshamaryam1/cooked-ml-collab/pull/6#issuecomment-5970244357)) |
-| 7 | Every member is both author and reviewer; ≥1 "changes requested" review | both | 2026-10-04 | ☑ (authored merged: Esha #1/#5/#6/#8/#10/#14, Nimra #2/#3/#4/#7/#9/#12/#13/#15; each has reviewed the other's PRs; "Changes requested" by Esha on [PR #11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11)) |
+| 7 | Every member is both author and reviewer; ≥1 "changes requested" review | both | 2026-10-04 | ☑ (authored merged: Esha #1/#5/#6/#8/#10/#14/#17, Nimra #2/#3/#4/#7/#9/#12/#13/#15/#16; each has reviewed the other's PRs; "Changes requested" by Esha on [PR #11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11)) |
 | 8 | A deliberately broken test causes a red check that blocks merging | — | — | ☐ |
 | 9 | `model-v1.0` exists on `main` and the independent reproduction matched | — | — | ☐ |
 
@@ -202,6 +202,9 @@ Requirement: **2 authored + 2 reviewed per member**, at least one review with
 | 13 | feat: raise n_estimators to 200 (Module 07 step 5 — conflict resolved with Esha's max_depth 8) | Nimra | Esha (approved — ran it on the branch) | dev | merged (squash `2bf697b`) — [PR #13](https://github.com/eshamaryam1/cooked-ml-collab/pull/13) | Step 5 second half: rebased onto `4906d30` (#14), `params.yaml` conflict **resolved on camera keeping both intents** (`max_depth: 8` + `n_estimators: 200`), r2 0.81331 → 0.83584 (#14) → **0.84156**, mae 0.29484, artifact 4,924,090 bytes; Esha approved after checking it out — 45 tests, `ruff` clean, `dvc pull` + `dvc status -c` in sync, `dvc repro` skips all three stages, clean tree |
 | 14 | feat: raise model max depth to 8 (Module 07 step 5 — Esha's half, merge before #13) | Esha | Nimra (approved) | dev | merged (squash `4906d30`) — [PR #14](https://github.com/eshamaryam1/cooked-ml-collab/pull/14) | conflict-pair first half: `model.params.max_depth: 12 → 8`, r2 **0.81331 → 0.83584**, mae 0.31727 → 0.30230, artifact 18.2 MB → 2.78 MB, byte-identical `metrics.json` over two forced runs |
 | 15 | chore: force lf line endings with .gitattributes and fix the v1/v2 verify snippet | Nimra | Esha (approved) | dev | merged (squash `1893642`) — [PR #15](https://github.com/eshamaryam1/cooked-ml-collab/pull/15) | **the fix PR for both changes-requested items on [#11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11)**: `* text=auto eol=lf` + `git add --renormalize .` so `dvc status` stays clean under `core.autocrlf=true` (with the mandatory `git rm --cached -r . ; git reset --hard` refresh), and Step 4's v1 ref fixed `HEAD~1` → `origin/dev`/`HEAD~2`; Esha verified both end-to-end before merging |
+| 16 | docs: sync trackers with github (prs 12-15, checkpoint 7, module statuses) | Nimra | Esha (approved) | dev | merged (squash `1a5c189`) — [PR #16](https://github.com/eshamaryam1/cooked-ml-collab/pull/16) | tracker-only: PR-log rows 12–15, checkpoint 7 ☑ (both members author *and* reviewer, changes-requested present), `docs/README.md` M03/M04/M05 → Complete, M07 → In progress |
+| 17 | docs: log the #13 and #11 merges — conflict-resolution box, data v2 shipped, checkpoint 7 | Esha | Nimra (approved) | dev | merged (squash `40da38d`) — [PR #17](https://github.com/eshamaryam1/cooked-ml-collab/pull/17) | log-only: data-update ☑ and conflict-resolution ☑ boxes ticked with the real squash SHAs, rows 11/13 → merged, shipped-config paragraph updated to data v2 (`8a862f33…`) + r2 0.84156 / MAE 0.29484, checkpoint 7 author lists corrected |
+| 18 | docs: close module 07 — M07 done, status table → Complete (6/9) | Nimra | Esha (review requested) | dev | open — [PR #18](https://github.com/eshamaryam1/cooked-ml-collab/pull/18) | Module 07 close-out: `PROGRESS.md` M07 ☑ done 2026-10-04, overall 5/9 → 6/9, `docs/README.md` row 7 → Complete |
 
 Required PRs to link in `REPORT.md`:
 
