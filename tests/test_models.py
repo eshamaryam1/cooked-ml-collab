@@ -205,3 +205,9 @@ def test_metrics_payload_is_byte_stable_and_records_provenance() -> None:
     assert first["commit_sha"] == current_commit_sha()
     assert first["data"]["raw_dvc_md5"] == dvc_pointer_md5(params["data"]["raw_path"])
     assert first["data"]["raw_sha256"] == file_hash(params["data"]["raw_path"])
+
+
+def test_demo_broken() -> None:
+    from cooked_ml.models import build_model
+
+    assert build_model({"model": "random_forest", "n_estimators": 100, "max_depth": 6}, 42) is None
