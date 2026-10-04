@@ -242,9 +242,15 @@ Fill in the PR log, experiment table and abandoned-branch box in
 - [x] 3 experiments per member, compared with `dvc exp show`, table pasted into a PR
 - [x] Winner applied with `dvc exp apply` and promoted via `feat/` PR with before/after metrics
 - [x] `≥2` merged PRs authored per member and `≥2` reviewed per member
-- [x] At least one "Changes requested" review, linked in `REPORT.md`
-- [x] Data-update PR showing old and new data versions via `dvc checkout`
-- [x] Conflict-resolution PR documented
+- [x] At least one "Changes requested" review — Esha on [PR #11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11)
+  (2026-10-04); still needs linking in `REPORT.md` (Module 09)
+- [x] Data-update PR showing old and new data versions via `dvc checkout` —
+  [PR #11](https://github.com/eshamaryam1/cooked-ml-collab/pull/11) (open; v1 `b2a3a690…` vs v2
+  `8a862f33…` both reproduced in the body)
+- [ ] Conflict-resolution PR documented — Esha's half merged as
+  [PR #14](https://github.com/eshamaryam1/cooked-ml-collab/pull/14); Nimra's
+  [PR #13](https://github.com/eshamaryam1/cooked-ml-collab/pull/13) is parked until she rebases
+  onto `dev`, resolves `params.yaml` keeping both intents, and documents it in the PR body
 - [x] One unmerged `exp/` branch with a written explanation
 - [x] Every PR used the checklist template
 
